@@ -32,25 +32,42 @@ class RegisterPage extends React.Component{
             // Some Custom Validation.
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then((user)=>{
-                  console.log(user);
+                 
                   console.log("Registration Successfull!");
 
+                  const User=firebase.auth().currentUser;
+
                   // Adding display Name.
-                  // user.updateProfile({
-                  //       displayName: "Jane Q. User",
-                  //       }).then((user)=> {
-                  //             // Update successful.
-                  //             console.log(user);
-                  //             console.log("Updation Successfull!");
-                  //       }).catch((error)=>{
-                  //             // An error happened.
-                  //             // Handle Errors here.
-                  //             var errorCode = error.code;
-                  //             var errorMessage = error.message;
+                  User.updateProfile({
+                        displayName: "Jane Q. User",
+                        }).then((user)=> {
+                              // Update successful.
+                              console.log("Updation Successfull!");
+                        }).catch((error)=>{
+                              // An error happened.
+                              // Handle Errors here.
+                              var errorCode = error.code;
+                              var errorMessage = error.message;
                               
-                  //             console.log('Error Code',errorCode);
-                  //             console.log('Error Message',errorMessage);
-                  // });
+                              console.log('Error Code',errorCode);
+                              console.log('Error Message',errorMessage);
+                  });
+                  console.log(User);
+                  // Sending a verification email.
+                  console.log('Current:',user);
+                  User.sendEmailVerification().then(()=> {
+                        console.log("Verification Email sent");
+                  }).catch((error)=> {
+                       
+                        // An error happened.
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        
+                        console.log('Error Code',errorCode);
+                        console.log('Error Message',errorMessage);
+                  });
+
             })
             .catch((error) =>{
                   // Handle Errors here.

@@ -41,6 +41,8 @@ class LoginPage extends React.Component{
                   console.log('Error Message',errorMessage);
             });
             
+            
+
             // Redirect on Successfull registration.
       };
 
