@@ -5,7 +5,8 @@ class RegisterPage extends React.Component{
       state={
             name:'',
             email:'',
-            password:''
+            password:'',
+            phone:'',
       };
 
       onNameChange=(e)=>{
@@ -39,10 +40,11 @@ class RegisterPage extends React.Component{
 
                   // Adding display Name.
                   User.updateProfile({
-                        displayName: "Jane Q. User",
+                        displayName:this.state.name
                         }).then((user)=> {
                               // Update successful.
-                              console.log("Updation Successfull!");
+                              console.log("Name Added!");
+                              console.log(User);
                         }).catch((error)=>{
                               // An error happened.
                               // Handle Errors here.
@@ -52,7 +54,7 @@ class RegisterPage extends React.Component{
                               console.log('Error Code',errorCode);
                               console.log('Error Message',errorMessage);
                   });
-                  console.log(User);
+                 
                   // Sending a verification email.
                   console.log('Current:',user);
                   User.sendEmailVerification().then(()=> {
@@ -85,6 +87,7 @@ class RegisterPage extends React.Component{
       render(){
             return (
                   <div>
+                        <h1>Register</h1>
                         <form onSubmit={this.onSubmitForm}>
                               <input
                                     type='text'
@@ -99,6 +102,7 @@ class RegisterPage extends React.Component{
                                     value={this.state.email}
                                     onChange={this.onEmailChange}
                               />
+
                               <input
                                     type='password'
                                     placeholder='Password'
