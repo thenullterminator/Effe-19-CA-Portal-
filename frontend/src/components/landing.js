@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/components/landing.scss';
-
+import {Link} from 'react-router-dom';
+// Importing Assets.
 import img1 from '../images/ca/effe.png';
 import img2 from '../images/ca/ca.jpeg';
 import img3 from '../images/ca/37811295_2096965080374205_4625127831544791040_n.jpeg';
@@ -39,8 +40,8 @@ const Landing=()=>{
                         <h5 className="header col s12 light">Register Now to be part of north's greatest fest!</h5>
                         </div>
                         <div className="row center">
-                        <a href="/set_new_user/" id="download-button" className="btn-large waves-effect waves-light teal lighten-1">Register</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="/user_login/" id="download-button" className="btn-large waves-effect waves-light teal lighten-1">Login</a>
+                        <Link to={'/register'} id="download-button" className="btn-large waves-effect waves-light teal lighten-1">Register</Link>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <Link to={'/login'} id="download-button" className="btn-large waves-effect waves-light teal lighten-1">Login</Link>
                         </div>
                         <br/><br/>
 
