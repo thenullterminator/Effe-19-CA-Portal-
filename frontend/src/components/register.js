@@ -1,5 +1,11 @@
 import React from 'react';
 import firebase from './firebase/firebase';
+import googleSignIn from '../components/googleSignIn';
+import facebookSignIn from '../components/facebookSignIn';
+import githubSignIn from '../components/githubSignIn';
+
+
+
 class RegisterPage extends React.Component{
 
       state={
@@ -7,6 +13,18 @@ class RegisterPage extends React.Component{
             email:'',
             password:'',
             phone:''
+      };
+
+      githubAuth=()=>{
+            githubSignIn(this.props);
+      };
+
+      googleAuth=()=>{
+            googleSignIn(this.props);
+      };
+      
+      facebookAuth=()=>{
+            facebookSignIn(this.props);
       };
 
       onNameChange=(e)=>{
@@ -52,7 +70,6 @@ class RegisterPage extends React.Component{
                               // Handle Errors here.
                               var errorCode = error.code;
                               var errorMessage = error.message;
-                              
                               console.log('Error Code',errorCode);
                               console.log('Error Message',errorMessage);
                   });
@@ -113,7 +130,11 @@ class RegisterPage extends React.Component{
                                     onChange={this.onPasswordChange}
                               />
 
-                              <button>Submit</button>
+                              <button type='submit'>Submit</button>
+                              <br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.googleAuth} href="#ff">Sign in with Google</a><br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.facebookAuth} href="#ff">Sign in with Facebook</a><br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.githubAuth} href="#ff">Sign in with Github</a>
                         </form>
                   </div>
             );

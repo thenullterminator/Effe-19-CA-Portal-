@@ -1,12 +1,27 @@
 import React from 'react';
 import firebase from './firebase/firebase';
-
+import googleSignIn from '../components/googleSignIn';
+import facebookSignIn from '../components/facebookSignIn';
+import githubSignIn from '../components/githubSignIn';
 
 class LoginPage extends React.Component{
 
       state={
             email:'',
             password:'',
+      };
+
+      githubAuth=()=>{
+            githubSignIn(this.props);
+      };
+
+
+      googleAuth=()=>{
+            googleSignIn(this.props);
+      };
+
+      facebookAuth=()=>{
+            facebookSignIn(this.props);
       };
 
       passwordReset=()=>{
@@ -95,6 +110,11 @@ class LoginPage extends React.Component{
 
                               <button type='submit'>Submit</button>
                               <button onClick={this.passwordReset}>Forgot Password?</button>
+                              <br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.googleAuth} href="#ff">Sign in with Google</a>
+                              <br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.facebookAuth} href="#ff">Sign in with Facebook</a><br></br>
+                              <a style={{cursor:'pointer'}} onClick={this.githubAuth} href="#ff">Sign in with Github</a>
                         </form>
                   </div>
             );
