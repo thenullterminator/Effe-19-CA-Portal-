@@ -1,11 +1,12 @@
 import React from 'react';
 import firebase from './firebase/firebase';
 
+
 class LoginPage extends React.Component{
 
       state={
             email:'',
-            password:''
+            password:'',
       };
 
       onEmailChange=(e)=>{
@@ -25,12 +26,27 @@ class LoginPage extends React.Component{
             e.preventDefault();
 
             // Some Custom Validation.
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(()=> {
+                  console.log('Local Persistence created');
+                  return firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);                       
+            })
+            .catch(function(error) {
+                  // Handle Errors here.
+                  var errorCode = error.code;
+                  var errorMessage = error.message;
+                  console.log('Error Code',errorCode);
+                  console.log('Error Message',errorMessage);
+            });
+
 
             firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
             .then((user)=>{
                   console.log(user);
                   console.log("Successfully Logged In!");
                   console.log(firebase.auth().currentUser);
+                  this.props.history.push('/dashboard');//Redirecting to Dashboard page.
+                  
             })
             .catch((error) =>{
                   // Handle Errors here.

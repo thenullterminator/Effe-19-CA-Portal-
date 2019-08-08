@@ -6,7 +6,7 @@ class RegisterPage extends React.Component{
             name:'',
             email:'',
             password:'',
-            phone:'',
+            phone:''
       };
 
       onNameChange=(e)=>{
@@ -31,6 +31,7 @@ class RegisterPage extends React.Component{
 
             e.preventDefault();
             // Some Custom Validation.
+           
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then((user)=>{
                  
@@ -45,6 +46,7 @@ class RegisterPage extends React.Component{
                               // Update successful.
                               console.log("Name Added!");
                               console.log(User);
+                             
                         }).catch((error)=>{
                               // An error happened.
                               // Handle Errors here.
@@ -59,6 +61,7 @@ class RegisterPage extends React.Component{
                   console.log('Current:',user);
                   User.sendEmailVerification().then(()=> {
                         console.log("Verification Email sent");
+                        this.props.history.push('/login');//Redirecting to Login page.
                   }).catch((error)=> {
                        
                         // An error happened.
