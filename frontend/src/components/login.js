@@ -3,7 +3,7 @@ import firebase from './firebase/firebase';
 import googleSignIn from '../components/googleSignIn';
 import facebookSignIn from '../components/facebookSignIn';
 import githubSignIn from '../components/githubSignIn';
-
+import {Link} from 'react-router-dom';
 class LoginPage extends React.Component{
 
       state={
@@ -109,6 +109,7 @@ class LoginPage extends React.Component{
                               />
 
                               <button type='submit'>Submit</button>
+                              <button><Link to='/register'>Register</Link></button>
                               <button onClick={this.passwordReset}>Forgot Password?</button>
                               <br></br>
                               <a style={{cursor:'pointer'}} onClick={this.googleAuth} href="#ff">Sign in with Google</a>

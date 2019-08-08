@@ -3,7 +3,7 @@ import firebase from './firebase/firebase';
 import googleSignIn from '../components/googleSignIn';
 import facebookSignIn from '../components/facebookSignIn';
 import githubSignIn from '../components/githubSignIn';
-
+import {Link} from 'react-router-dom';
 
 
 class RegisterPage extends React.Component{
@@ -131,6 +131,7 @@ class RegisterPage extends React.Component{
                               />
 
                               <button type='submit'>Submit</button>
+                              <button><Link to='/login'>Login</Link></button>
                               <br></br>
                               <a style={{cursor:'pointer'}} onClick={this.googleAuth} href="#ff">Sign in with Google</a><br></br>
                               <a style={{cursor:'pointer'}} onClick={this.facebookAuth} href="#ff">Sign in with Facebook</a><br></br>
