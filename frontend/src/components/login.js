@@ -9,6 +9,19 @@ class LoginPage extends React.Component{
             password:'',
       };
 
+      passwordReset=()=>{
+
+            firebase.auth().sendPasswordResetEmail(this.state.email).then(()=> {
+                  console.log('Password Reset Email sent.');
+            }).catch((error)=>{
+                  // Handle Errors here.
+                  var errorCode = error.code;
+                  var errorMessage = error.message;
+                  console.log('Error Code',errorCode);
+                  console.log('Error Message',errorMessage);
+            });
+      };
+
       onEmailChange=(e)=>{
             this.setState({
                   email:e.target.value
@@ -31,7 +44,7 @@ class LoginPage extends React.Component{
                   console.log('Local Persistence created');
                   return firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);                       
             })
-            .catch(function(error) {
+            .catch((error)=> {
                   // Handle Errors here.
                   var errorCode = error.code;
                   var errorMessage = error.message;
@@ -80,7 +93,8 @@ class LoginPage extends React.Component{
                                     onChange={this.onPasswordChange}
                               />
 
-                              <button>Submit</button>
+                              <button type='submit'>Submit</button>
+                              <button onClick={this.passwordReset}>Forgot Password?</button>
                         </form>
                   </div>
             );
