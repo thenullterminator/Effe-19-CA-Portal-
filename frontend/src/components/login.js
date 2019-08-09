@@ -1,125 +1,140 @@
-import React from 'react';
-import firebase from './firebase/firebase';
-import googleSignIn from '../components/googleSignIn';
-import facebookSignIn from '../components/facebookSignIn';
-import githubSignIn from '../components/githubSignIn';
-import {Link} from 'react-router-dom';
-class LoginPage extends React.Component{
+import React from "react";
+import firebase from "./firebase/firebase";
+import googleSignIn from "../lib/googleSignIn";
+import facebookSignIn from "../lib/facebookSignIn";
+import githubSignIn from "../lib/githubSignIn";
+import { Link } from "react-router-dom";
+class LoginPage extends React.Component {
+  state = {
+    email: "",
+    password: ""
+  };
 
-      state={
-            email:'',
-            password:'',
-      };
+  githubAuth = () => {
+    githubSignIn(this.props);
+  };
 
-      githubAuth=()=>{
-            githubSignIn(this.props);
-      };
+  googleAuth = () => {
+    googleSignIn(this.props);
+  };
 
+  facebookAuth = () => {
+    facebookSignIn(this.props);
+  };
 
-      googleAuth=()=>{
-            googleSignIn(this.props);
-      };
+  passwordReset = () => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(this.state.email)
+      .then(() => {
+        console.log("Password Reset Email sent.");
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log("Error Code", errorCode);
+        console.log("Error Message", errorMessage);
+      });
+  };
 
-      facebookAuth=()=>{
-            facebookSignIn(this.props);
-      };
+  onEmailChange = e => {
+    this.setState({
+      email: e.target.value
+    });
+  };
 
-      passwordReset=()=>{
+  onPasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    });
+  };
 
-            firebase.auth().sendPasswordResetEmail(this.state.email).then(()=> {
-                  console.log('Password Reset Email sent.');
-            }).catch((error)=>{
-                  // Handle Errors here.
-                  var errorCode = error.code;
-                  var errorMessage = error.message;
-                  console.log('Error Code',errorCode);
-                  console.log('Error Message',errorMessage);
-            });
-      };
+  onSubmitForm = e => {
+    e.preventDefault();
 
-      onEmailChange=(e)=>{
-            this.setState({
-                  email:e.target.value
-            });
-      };
+    // Some Custom Validation.
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        console.log("Local Persistence created");
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(this.state.email, this.state.password);
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log("Error Code", errorCode);
+        console.log("Error Message", errorMessage);
+      });
 
-      onPasswordChange=(e)=>{
-            this.setState({
-                  password:e.target.value
-            });
-      };
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(user => {
+        console.log(user);
+        console.log("Successfully Logged In!");
+        console.log(firebase.auth().currentUser);
+        this.props.history.push("/dashboard"); //Redirecting to Dashboard page.
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
 
-      onSubmitForm=(e)=>{
+        console.log("Error Code", errorCode);
+        console.log("Error Message", errorMessage);
+      });
 
-            e.preventDefault();
+    // Redirect on Successfull registration.
+  };
 
-            // Some Custom Validation.
-            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .then(()=> {
-                  console.log('Local Persistence created');
-                  return firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);                       
-            })
-            .catch((error)=> {
-                  // Handle Errors here.
-                  var errorCode = error.code;
-                  var errorMessage = error.message;
-                  console.log('Error Code',errorCode);
-                  console.log('Error Message',errorMessage);
-            });
+  render() {
+    return (
+      <div>
+        <h1>Login</h1>
+        <form onSubmit={this.onSubmitForm}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={this.state.email}
+            onChange={this.onEmailChange}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={this.state.password}
+            onChange={this.onPasswordChange}
+          />
 
-
-            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then((user)=>{
-                  console.log(user);
-                  console.log("Successfully Logged In!");
-                  console.log(firebase.auth().currentUser);
-                  this.props.history.push('/dashboard');//Redirecting to Dashboard page.
-                  
-            })
-            .catch((error) =>{
-                  // Handle Errors here.
-                  var errorCode = error.code;
-                  var errorMessage = error.message;
-                  
-                  console.log('Error Code',errorCode);
-                  console.log('Error Message',errorMessage);
-            });
-            
-            
-
-            // Redirect on Successfull registration.
-      };
-
-      render(){
-            return (
-                  <div>
-                        <h1>Login</h1>
-                        <form onSubmit={this.onSubmitForm}>
-                              <input
-                                    type='email'
-                                    placeholder='Email'
-                                    value={this.state.email}
-                                    onChange={this.onEmailChange}
-                              />
-                              <input
-                                    type='password'
-                                    placeholder='Password'
-                                    value={this.state.password}
-                                    onChange={this.onPasswordChange}
-                              />
-
-                              <button type='submit'>Submit</button>
-                              <button><Link to='/register'>Register</Link></button>
-                              <button onClick={this.passwordReset}>Forgot Password?</button>
-                              <br></br>
-                              <a style={{cursor:'pointer'}} onClick={this.googleAuth} href="#ff">Sign in with Google</a>
-                              <br></br>
-                              <a style={{cursor:'pointer'}} onClick={this.facebookAuth} href="#ff">Sign in with Facebook</a><br></br>
-                              <a style={{cursor:'pointer'}} onClick={this.githubAuth} href="#ff">Sign in with Github</a>
-                        </form>
-                  </div>
-            );
-      };
+          <button type="submit">Submit</button>
+          <button>
+            <Link to="/register">Register</Link>
+          </button>
+          <button onClick={this.passwordReset}>Forgot Password?</button>
+          <br />
+          <a style={{ cursor: "pointer" }} onClick={this.googleAuth} href="#ff">
+            Sign in with Google
+          </a>
+          <br />
+          <a
+            style={{ cursor: "pointer" }}
+            onClick={this.facebookAuth}
+            href="#ff"
+          >
+            Sign in with Facebook
+          </a>
+          <br />
+          <a style={{ cursor: "pointer" }} onClick={this.githubAuth} href="#ff">
+            Sign in with Github
+          </a>
+        </form>
+      </div>
+    );
+  }
 }
 
 export default LoginPage;
