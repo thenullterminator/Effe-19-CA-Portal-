@@ -5,10 +5,14 @@ import facebookSignIn from "../lib/facebookSignIn";
 import githubSignIn from "../lib/githubSignIn";
 import { Link } from "react-router-dom";
 class LoginPage extends React.Component {
-  state = {
-    email: "",
-    password: ""
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
 
   githubAuth = () => {
     githubSignIn(this.props);
@@ -92,10 +96,18 @@ class LoginPage extends React.Component {
     // Redirect on Successfull registration.
   };
 
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.history.push("/dashboard"); //Redirecting to home page.
+      }
+    });
+  }
+
   render() {
     return (
       <div>
-        <h1>Login</h1>
+        <h1>Login-</h1>
         <form onSubmit={this.onSubmitForm}>
           <input
             type="email"
