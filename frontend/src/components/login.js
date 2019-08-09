@@ -7,11 +7,22 @@ import { Link } from "react-router-dom";
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      isloading: true
     };
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // console.log("HIII");
+        // console.log(user);
+        this.props.history.push("/dashboard"); //Redirecting to home page.
+      }
+    });
+    this.setState({
+      isloading: false
+    });
   }
 
   githubAuth = () => {
@@ -96,15 +107,13 @@ class LoginPage extends React.Component {
     // Redirect on Successfull registration.
   };
 
-  componentWillMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.props.history.push("/dashboard"); //Redirecting to home page.
-      }
-    });
-  }
-
   render() {
+    //console.log(this.state.isloading);
+
+    if (this.state.isloading) {
+      return <div>Loading..</div>;
+    }
+
     return (
       <div>
         <h1>Login-</h1>

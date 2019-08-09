@@ -2,9 +2,30 @@ import React from "react";
 import firebase from "./firebase/firebase";
 
 class Dashboard extends React.Component {
-  state = {
-    currentUser: {}
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentUser: {},
+      isLoading: true
+    };
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // console.log("Signed in");
+        console.log("Signed in! ", user.toJSON());
+        this.setState({
+          currentUser: user
+        });
+        this.setState({ isLoading: false });
+      } else {
+        // User is signed out.
+        // ...
+        console.log("Signed out!");
+        this.props.history.push("/login"); //Redirecting to home page.
+      }
+    });
+  }
 
   LogOut = () => {
     firebase
@@ -27,22 +48,13 @@ class Dashboard extends React.Component {
   };
 
   componentWillMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        // console.log("Signed in");
-        console.log("Signed in! ", user.toJSON());
-        this.setState({
-          currentUser: user
-        });
-      } else {
-        // User is signed out.
-        // ...
-        console.log("Signed out!");
-        this.props.history.push("/login"); //Redirecting to home page.
-      }
-    });
+    //this is depreicated do-not use
   }
   render() {
+    if (this.state.isLoading) {
+      return <div>Loading</div>;
+    }
+
     return (
       <div>
         <h1>Dash Board</h1>
