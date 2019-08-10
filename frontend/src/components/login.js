@@ -15,8 +15,6 @@ class LoginPage extends React.Component {
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        // console.log("HIII");
-        // console.log(user);
         this.props.history.push("/dashboard"); //Redirecting to home page.
       }
     });
@@ -104,7 +102,7 @@ class LoginPage extends React.Component {
         console.log("Error Message", errorMessage);
       });
 
-    // Redirect on Successfull registration.
+    
   };
 
   render() {

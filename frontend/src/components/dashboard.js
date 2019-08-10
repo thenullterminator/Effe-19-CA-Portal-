@@ -15,9 +15,9 @@ class Dashboard extends React.Component {
         // console.log("Signed in");
         console.log("Signed in! ", user.toJSON());
         this.setState({
-          currentUser: user
+          currentUser: user,
+          isLoading: false
         });
-        this.setState({ isLoading: false });
       } else {
         // User is signed out.
         // ...

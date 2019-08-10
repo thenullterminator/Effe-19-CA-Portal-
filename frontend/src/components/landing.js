@@ -27,7 +27,7 @@ const Landing=()=>{
                         <li><a href="#incentives">Incentives</a></li>
                         <li><a href="#contact">Contact</a></li>
                         </ul>
-                        <a href="#" data-target="nav-mobile" className="sidenav-trigger"><i className="material-icons">menu</i></a>
+                        <a href="#d" data-target="nav-mobile" className="sidenav-trigger"><i className="material-icons">menu</i></a>
                   </div>
                   </nav>
 
