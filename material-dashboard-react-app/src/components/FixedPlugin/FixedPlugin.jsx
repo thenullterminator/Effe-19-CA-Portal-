@@ -37,10 +37,10 @@ class FixedPlugin extends Component {
         })}
       >
         <div id="fixedPluginClasses" className={this.props.fixedClasses}>
-          <div onClick={this.handleClick}>
+          {/* <div onClick={this.handleClick}>
             <i className="fa fa-cog fa-2x" />
-          </div>
-          <ul className="dropdown-menu">
+          </div> */}
+          {/* <ul className="dropdown-menu">
             <li className="header-title">SIDEBAR FILTERS</li>
             <li className="adjustments-line">
               <a className="switch-trigger">
@@ -211,7 +211,10 @@ class FixedPlugin extends Component {
                 repo="material-dashboard-react-nodejs"
               />
             </li>
-          </ul>
+          </ul> */}
+
+
+
         </div>
       </div>
     );

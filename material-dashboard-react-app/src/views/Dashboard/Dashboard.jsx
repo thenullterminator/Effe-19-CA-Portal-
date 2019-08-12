@@ -39,11 +39,35 @@ import {
 } from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-
+import firebase from '../../firebase/firebase';
 class Dashboard extends React.Component {
-  state = {
-    value: 0
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentUser: {},
+      isLoading: true,
+      value:0
+    };
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // console.log("Signed in");
+        console.log("Signed in! ", user.toJSON());
+        this.setState({
+          currentUser: user,
+          isLoading: false
+        });
+      } else {
+        // User is signed out.
+        // ...
+        console.log("Signed out!");
+        this.props.history.push("/login"); //Redirecting to home page.
+      }
+    });
+  }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -62,19 +86,15 @@ class Dashboard extends React.Component {
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Used Space</p>
+                <p className={classes.cardCategory}>Total Regisrations</p>
                 <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
+                  350+
                 </h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
-                  <Danger>
-                    <Warning />
-                  </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Get more space
-                  </a>
+                <Update />
+                Hurry up ! Start completing tasks to win exciting prizes.
                 </div>
               </CardFooter>
             </Card>
@@ -85,13 +105,12 @@ class Dashboard extends React.Component {
                 <CardIcon color="success">
                   <Store />
                 </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
+                <p className={classes.cardCategory}>Footfall</p>
+                <h3 className={classes.cardTitle}>+25000</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
-                  <DateRange />
-                  Last 24 Hours
+                  Effervescence-18
                 </div>
               </CardFooter>
             </Card>
@@ -102,13 +121,13 @@ class Dashboard extends React.Component {
                 <CardIcon color="danger">
                   <Icon>info_outline</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
-                <h3 className={classes.cardTitle}>75</h3>
+                <p className={classes.cardCategory}>Edition</p>
+                <h3 className={classes.cardTitle}>17th</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
-                  <LocalOffer />
-                  Tracked from Github
+                  {/* <LocalOffer /> */}
+                  Effervescence-19
                 </div>
               </CardFooter>
             </Card>
@@ -120,7 +139,7 @@ class Dashboard extends React.Component {
                   <Accessibility />
                 </CardIcon>
                 <p className={classes.cardCategory}>Followers</p>
-                <h3 className={classes.cardTitle}>+245</h3>
+                <h3 className={classes.cardTitle}>+37000</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
@@ -132,7 +151,7 @@ class Dashboard extends React.Component {
           </GridItem>
         </GridContainer>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={4}>
+          {/* <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="success">
                 <ChartistGraph
@@ -158,8 +177,8 @@ class Dashboard extends React.Component {
                 </div>
               </CardFooter>
             </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          </GridItem> */}
+          {/* <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="warning">
                 <ChartistGraph
@@ -183,8 +202,8 @@ class Dashboard extends React.Component {
                 </div>
               </CardFooter>
             </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          </GridItem> */}
+          {/* <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="danger">
                 <ChartistGraph
@@ -207,7 +226,7 @@ class Dashboard extends React.Component {
                 </div>
               </CardFooter>
             </Card>
-          </GridItem>
+          </GridItem> */}
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
@@ -216,8 +235,8 @@ class Dashboard extends React.Component {
               headerColor="primary"
               tabs={[
                 {
-                  tabName: "Bugs",
-                  tabIcon: BugReport,
+                  tabName: "Attempted",
+                  // tabIcon: BugReport,
                   tabContent: (
                     <Tasks
                       checkedIndexes={[0, 3]}
@@ -227,8 +246,8 @@ class Dashboard extends React.Component {
                   )
                 },
                 {
-                  tabName: "Website",
-                  tabIcon: Code,
+                  tabName: "Not Attempted",
+                  // tabIcon: Code,
                   tabContent: (
                     <Tasks
                       checkedIndexes={[0]}
@@ -236,33 +255,34 @@ class Dashboard extends React.Component {
                       tasks={website}
                     />
                   )
-                },
-                {
-                  tabName: "Server",
-                  tabIcon: Cloud,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[1]}
-                      tasksIndexes={[0, 1, 2]}
-                      tasks={server}
-                    />
-                  )
                 }
+                // ,
+                // {
+                //   tabName: "Server",
+                //   tabIcon: Cloud,
+                //   tabContent: (
+                //     <Tasks
+                //       checkedIndexes={[1]}
+                //       tasksIndexes={[0, 1, 2]}
+                //       tasks={server}
+                //     />
+                //   )
+                // }
               ]}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
+                <h4 className={classes.cardTitleWhite}>All Tasks</h4>
                 <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
+                  New tasks will appear in top of the table.
                 </p>
               </CardHeader>
               <CardBody>
                 <Table
                   tableHeaderColor="warning"
-                  tableHead={["ID", "Name", "Salary", "Country"]}
+                  tableHead={["ID", "Name", "Base points", "Date"]}
                   tableData={[
                     ["1", "Dakota Rice", "$36,738", "Niger"],
                     ["2", "Minerva Hooper", "$23,789", "Curaçao"],
