@@ -47,7 +47,7 @@ class Tasks extends React.Component {
           {tasksIndexes.map(value => (
             <TableRow key={value} className={classes.tableRow}>
               <TableCell className={tableCellClasses}>
-                <Checkbox
+                {/* <Checkbox
                   checked={this.state.checked.indexOf(value) !== -1}
                   tabIndex={-1}
                   onClick={this.handleToggle(value)}
@@ -57,7 +57,8 @@ class Tasks extends React.Component {
                     checked: classes.checked,
                     root: classes.root
                   }}
-                />
+                /> */}
+                #1
               </TableCell>
               <TableCell className={tableCellClasses}>{tasks[value]}</TableCell>
               <TableCell className={classes.tableActions}>
@@ -71,11 +72,11 @@ class Tasks extends React.Component {
                     aria-label="Edit"
                     className={classes.tableActionButton}
                   >
-                    <Edit
+                    {/* <Edit
                       className={
                         classes.tableActionButtonIcon + " " + classes.edit
                       }
-                    />
+                    /> */}
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -88,11 +89,11 @@ class Tasks extends React.Component {
                     aria-label="Close"
                     className={classes.tableActionButton}
                   >
-                    <Close
+                    {/* <Close
                       className={
                         classes.tableActionButtonIcon + " " + classes.close
                       }
-                    />
+                    /> */}
                   </IconButton>
                 </Tooltip>
               </TableCell>
