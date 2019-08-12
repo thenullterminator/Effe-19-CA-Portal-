@@ -229,7 +229,7 @@ class Dashboard extends React.Component {
           </GridItem> */}
         </GridContainer>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={14}>
             <CustomTabs
               title="Tasks:"
               headerColor="primary"
@@ -271,7 +271,9 @@ class Dashboard extends React.Component {
               ]}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+          </GridContainer>
+          <GridContainer>
+          <GridItem xs={12} sm={12} md={14}>
             <Card>
               <CardHeader color="warning">
                 <h4 className={classes.cardTitleWhite}>All Tasks</h4>
