@@ -1,5 +1,5 @@
-import * as firebase from 'firebase';
-import Config from './config';
+import * as firebase from "firebase";
+import Config from "./config";
 
 firebase.initializeApp(Config);
 
@@ -29,7 +29,7 @@ export default firebase;
 //       // Handle Errors here.
 //       var errorCode = error.code;
 //       var errorMessage = error.message;
-      
+
 //       console.log('Error Code',errorCode);
 //       console.log('Error Message',errorMessage);
 // });
@@ -41,4 +41,3 @@ export default firebase;
 // }).catch((e)=>{
 //       console.log(e);
 // });
-    

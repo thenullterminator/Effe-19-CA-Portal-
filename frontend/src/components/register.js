@@ -9,7 +9,6 @@ class RegisterPage extends React.Component {
   state = {
     name: "",
     email: "",
-
     password: "",
     phone: ""
   };

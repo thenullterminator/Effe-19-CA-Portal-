@@ -24,11 +24,10 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
-import firebase from '../../firebase/firebase';
+import firebase from "../../firebase/firebase";
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
-
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -38,15 +37,14 @@ class LoginPage extends React.Component {
     this.state = {
       checked: [],
       errors: {},
-      forgot:false
+      forgot: false
     };
 
-    // firebase.auth().onAuthStateChanged(user => {
-    //   if (user) {
-    //     this.props.history.push("/admin/dashboard"); //Redirecting to home page.
-    //   }
-    // });
-
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.history.push("/admin/dashboard"); //Redirecting to home page.
+      }
+    });
   }
 
   githubAuth = () => {
@@ -61,9 +59,7 @@ class LoginPage extends React.Component {
     facebookSignIn(this.props);
   };
 
-
   login = async e => {
-
     e.preventDefault();
 
     const { history } = this.props;
@@ -77,7 +73,7 @@ class LoginPage extends React.Component {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-      firebase
+    firebase
       .auth()
       .signInWithEmailAndPassword(formValues.email, formValues.password)
       .then(user => {
@@ -94,8 +90,8 @@ class LoginPage extends React.Component {
         console.log("Error Code", errorCode);
         console.log("Error Message", errorMessage);
       });
-      
   };
+
   handleToggle = value => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
@@ -111,6 +107,7 @@ class LoginPage extends React.Component {
       checked: newChecked
     });
   };
+
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
@@ -134,7 +131,7 @@ class LoginPage extends React.Component {
                 >
                   <h4 className={classes.cardTitle}>Log in</h4>
                   <div className={classes.socialLine}>
-                  <Button
+                    <Button
                       color="transparent"
                       justIcon
                       className={classes.customButtonClass}
@@ -160,18 +157,29 @@ class LoginPage extends React.Component {
                     >
                       <i className={"fa fa-google-plus"} />
                     </Button>
-
                   </div>
                 </CardHeader>
                 <CardBody>
                   <p
                     className={`${classes.textCenter} ${classes.checkboxLabel}`}
                   >
-              
-                    {!(this.state.forgot) && <p style={{cursor:'pointer'}} onClick={()=> this.setState({forgot:true})}>Forgot password?</p>}
-                    {(this.state.forgot) && <p>Incase you forgot your password enter email and click <span><strong style={{cursor:'pointer'}} >here</strong></span> to send a password reset email.</p>}
-                    
-                    
+                    {!this.state.forgot && (
+                      <p
+                        style={{ cursor: "pointer" }}
+                        onClick={() => this.setState({ forgot: true })}
+                      >
+                        Forgot password?
+                      </p>
+                    )}
+                    {this.state.forgot && (
+                      <p>
+                        Incase you forgot your password enter email and click{" "}
+                        <span>
+                          <strong style={{ cursor: "pointer" }}>here</strong>
+                        </span>{" "}
+                        to send a password reset email.
+                      </p>
+                    )}
                   </p>
                   <CustomInput
                     labelText="Email..."

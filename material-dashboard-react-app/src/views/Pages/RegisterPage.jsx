@@ -25,7 +25,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import registerPageStyle from "assets/jss/material-dashboard-react/views/registerPageStyle.jsx";
-import firebase from '../../firebase/firebase';
+import firebase from "../../firebase/firebase";
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
@@ -39,6 +39,12 @@ class RegisterPage extends React.Component {
       checked: [],
       errors: {}
     };
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.history.push("/admin/dashboard"); //Redirecting to home page.
+      }
+    });
   }
 
   githubAuth = () => {
@@ -55,7 +61,7 @@ class RegisterPage extends React.Component {
 
   register = async e => {
     e.preventDefault();
-    
+
     const { history } = this.props;
 
     const fields = ["name", "email", "password"];
@@ -151,7 +157,6 @@ class RegisterPage extends React.Component {
                 >
                   <h4 className={classes.cardTitle}>Register</h4>
                   <div className={classes.socialLine}>
-
                     <Button
                       color="transparent"
                       justIcon
@@ -178,8 +183,6 @@ class RegisterPage extends React.Component {
                     >
                       <i className={"fa fa-google-plus"} />
                     </Button>
-
-
                   </div>
                 </CardHeader>
                 <CardBody>
