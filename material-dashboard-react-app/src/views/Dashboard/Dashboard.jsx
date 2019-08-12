@@ -29,7 +29,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-import moment from 'moment';
+import moment from "moment";
 import { bugs, website, server } from "variables/general.jsx";
 
 import {
@@ -39,17 +39,16 @@ import {
 } from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-import firebase from '../../firebase/firebase';
+import firebase from "../../firebase/firebase";
 class Dashboard extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       currentUser: {},
       isLoading: true,
-      value:0,
-      allTask:[],
+      value: 0,
+      allTask: []
     };
 
     firebase.auth().onAuthStateChanged(user => {
@@ -69,35 +68,36 @@ class Dashboard extends React.Component {
     });
   }
 
-  fetchAllTask=()=>{
-
-    
-    firebase.database().ref('TASKS')
-      .on('value',(snapshot)=>{
-        const AllTask=[],taskID=[];
-        var i=1;
-        snapshot.forEach((child)=>{
-
+  fetchAllTask = () => {
+    firebase
+      .database()
+      .ref("TASKS")
+      .on("value", snapshot => {
+        const AllTask = [],
+          taskID = [];
+        var i = 1;
+        snapshot.forEach(child => {
           AllTask.push([
-            i,child.val().task,child.val().points,moment(child.val().createdAt).format('MMMM Do, YYYY')
+            i,
+            child.val().task,
+            child.val().points,
+            moment(child.val().createdAt).format("MMMM Do, YYYY")
           ]);
           taskID.push(child.key);
           i++;
         });
         this.setState({
-          isLoading:false,
-          allTask:AllTask,
+          allTask: AllTask
         });
-        // console.log(AllTask);
+        //console.log(AllTask);
         // console.log(this.state.allTask);
       });
-      
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.fetchAllTask();
-  };
-  
+  }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -108,9 +108,8 @@ class Dashboard extends React.Component {
   render() {
     const { classes } = this.props;
 
-    if(this.state.isLoading) return (<h1>Loading</h1>);
-    else
-    {
+    if (this.state.isLoading) return <h1>Loading</h1>;
+    else {
       return (
         <div>
           <GridContainer>
@@ -120,15 +119,13 @@ class Dashboard extends React.Component {
                   <CardIcon color="warning">
                     <Icon>content_copy</Icon>
                   </CardIcon>
-                  <p className={classes.cardCategory}>Total Regisrations</p>
-                  <h3 className={classes.cardTitle}>
-                    350+
-                  </h3>
+                  <p className={classes.cardCategory}>Total Score</p>
+                  <h3 className={classes.cardTitle}>350+</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
-                  <Update />
-                  Hurry up ! Start completing tasks to win exciting prizes.
+                    <Update />
+                    Hurry up ! Start completing tasks to win exciting prizes.
                   </div>
                 </CardFooter>
               </Card>
@@ -143,9 +140,7 @@ class Dashboard extends React.Component {
                   <h3 className={classes.cardTitle}>+25000</h3>
                 </CardHeader>
                 <CardFooter stats>
-                  <div className={classes.stats}>
-                    Effervescence-18
-                  </div>
+                  <div className={classes.stats}>Effervescence-18</div>
                 </CardFooter>
               </Card>
             </GridItem>
@@ -305,9 +300,9 @@ class Dashboard extends React.Component {
                 ]}
               />
             </GridItem>
-            </GridContainer>
-            <GridContainer>
-            <GridItem  xs={12} sm={12} md={14}>
+          </GridContainer>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={14}>
               <Card>
                 <CardHeader color="warning">
                   <h4 className={classes.cardTitleWhite}>All Tasks</h4>
@@ -316,12 +311,10 @@ class Dashboard extends React.Component {
                   </p>
                 </CardHeader>
                 <CardBody>
-                    <Table
+                  <Table
                     tableHeaderColor="warning"
                     tableHead={["ID", "Name", "Base points", "Date"]}
-                    tableData={
-                      this.state.allTask
-                    }
+                    tableData={this.state.allTask}
                   />
                 </CardBody>
               </Card>
@@ -330,8 +323,6 @@ class Dashboard extends React.Component {
         </div>
       );
     }
-
-    
   }
 }
 
