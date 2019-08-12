@@ -25,6 +25,10 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import registerPageStyle from "assets/jss/material-dashboard-react/views/registerPageStyle.jsx";
+import firebase from '../../firebase/firebase';
+import googleSignIn from "../../lib/googleSignIn";
+import facebookSignIn from "../../lib/facebookSignIn";
+import githubSignIn from "../../lib/githubSignIn";
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -36,12 +40,25 @@ class RegisterPage extends React.Component {
       errors: {}
     };
   }
+
+  githubAuth = () => {
+    githubSignIn(this.props);
+  };
+
+  googleAuth = () => {
+    googleSignIn(this.props);
+  };
+
+  facebookAuth = () => {
+    facebookSignIn(this.props);
+  };
+
   register = async e => {
     e.preventDefault();
-
+    
     const { history } = this.props;
 
-    const fields = ["name", "username", "password"];
+    const fields = ["name", "email", "password"];
     const formElements = e.target.elements;
 
     const formValues = fields
@@ -50,26 +67,59 @@ class RegisterPage extends React.Component {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    let registerRequest;
-    try {
-      registerRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/register`,
-        {
-          ...formValues
-        }
-      );
-    } catch ({ response }) {
-      registerRequest = response;
-    }
-    const { data: registerRequestData } = registerRequest;
-    if (registerRequestData.success) {
-      return history.push("/login");
-    }
+    console.log(formValues);
 
-    this.setState({
-      errors:
-        registerRequestData.messages && registerRequestData.messages.errors
-    });
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(formValues.email, formValues.password)
+      .then(user => {
+        console.log("Registration Successfull!");
+
+        const User = firebase.auth().currentUser;
+
+        // Adding display Name.
+        User.updateProfile({
+          displayName: formValues.name
+        })
+          .then(user => {
+            // Update successful.
+            console.log("Name Added!");
+            console.log(User);
+          })
+          .catch(error => {
+            // An error happened.
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Error Code", errorCode);
+            console.log("Error Message", errorMessage);
+          });
+
+        // Sending a verification email.
+        console.log("Current:", user);
+        User.sendEmailVerification()
+          .then(() => {
+            console.log("Verification Email sent");
+            this.props.history.push("/auth/login-page"); //Redirecting to Login page.
+          })
+          .catch(error => {
+            // An error happened.
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+
+            console.log("Error Code", errorCode);
+            console.log("Error Message", errorMessage);
+          });
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        console.log("Error Code", errorCode);
+        console.log("Error Message", errorMessage);
+      });
   };
   handleToggle = value => {
     const { checked } = this.state;
@@ -101,22 +151,35 @@ class RegisterPage extends React.Component {
                 >
                   <h4 className={classes.cardTitle}>Register</h4>
                   <div className={classes.socialLine}>
-                    {[
-                      "fa fa-facebook-square",
-                      "fa fa-twitter",
-                      "fa fa-google-plus"
-                    ].map((prop, key) => {
-                      return (
-                        <Button
-                          color="transparent"
-                          justIcon
-                          key={key}
-                          className={classes.customButtonClass}
-                        >
-                          <i className={prop} />
-                        </Button>
-                      );
-                    })}
+
+                    <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.facebookAuth}
+                    >
+                      <i className={"fa fa-facebook-square"} />
+                    </Button>
+
+                    <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.githubAuth}
+                    >
+                      <i className={"fa fa-github"} />
+                    </Button>
+
+                    <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.googleAuth}
+                    >
+                      <i className={"fa fa-google-plus"} />
+                    </Button>
+
+
                   </div>
                 </CardHeader>
                 <CardBody>

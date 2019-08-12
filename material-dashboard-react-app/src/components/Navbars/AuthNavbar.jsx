@@ -52,7 +52,7 @@ class AuthNavbar extends React.Component {
     });
     var list = (
       <List className={classes.list}>
-        <ListItem className={classes.listItem}>
+        {/* <ListItem className={classes.listItem}>
           <NavLink to={"/admin/dashboard"} className={classes.navLink}>
             <Dashboard className={classes.listItemIcon} />
             <ListItemText
@@ -61,7 +61,7 @@ class AuthNavbar extends React.Component {
               className={classes.listItemText}
             />
           </NavLink>
-        </ListItem>
+        </ListItem> */}
         <ListItem className={classes.listItem}>
           <NavLink
             to={"/auth/register-page"}
@@ -100,14 +100,14 @@ class AuthNavbar extends React.Component {
           <Hidden smDown>
             <div className={classes.flex}>
               <Button href="#" className={classes.title} color="transparent">
-                {brandText}
+                Effervescence-19
               </Button>
             </div>
           </Hidden>
           <Hidden mdUp>
             <div className={classes.flex}>
               <Button href="#" className={classes.title} color="transparent">
-                MD Pro React
+                Effervescence-19
               </Button>
             </div>
           </Hidden>

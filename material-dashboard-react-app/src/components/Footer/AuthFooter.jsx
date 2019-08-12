@@ -6,13 +6,12 @@ import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 // core components
 import footerStyle from "assets/jss/material-dashboard-react/components/authFooterStyle.jsx";
-
 function Footer({ ...props }) {
   const { classes } = props;
   return (
     <footer className={classes.footer}>
-      <div className={classes.container}>
-        <div className={classes.left}>
+      <div style={{textAlign:'center'}} className={classes.container}>
+        {/* <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a href="#home" className={classes.block}>
@@ -35,18 +34,12 @@ function Footer({ ...props }) {
               </a>
             </ListItem>
           </List>
-        </div>
-        <p className={classes.right}>
+        </div> */}
+        <p  className={classes.center}>
           <span>
-            &copy; {1900 + new Date().getYear()} , made with love, by{" "}
-            <a href="https://www.creative-tim.com" className={classes.a}>
-              Creative Tim
-            </a>{" "}
-            and{" "}
-            <a href="https://udevoffice.com/" className={classes.a}>
-              Udevoffice
-            </a>{" "}
-            for a better web
+            Made with ❤️  by Team{" "}
+           <a href='https://effe.org.in/'>Effervescence</a>
+           
           </span>
         </p>
       </div>

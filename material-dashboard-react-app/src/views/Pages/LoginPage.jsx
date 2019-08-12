@@ -24,6 +24,11 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
+import firebase from '../../firebase/firebase';
+import googleSignIn from "../../lib/googleSignIn";
+import facebookSignIn from "../../lib/facebookSignIn";
+import githubSignIn from "../../lib/githubSignIn";
+
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -32,16 +37,38 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {
       checked: [],
-      errors: {}
+      errors: {},
+      forgot:false
     };
+
+    // firebase.auth().onAuthStateChanged(user => {
+    //   if (user) {
+    //     this.props.history.push("/admin/dashboard"); //Redirecting to home page.
+    //   }
+    // });
+
   }
+
+  githubAuth = () => {
+    githubSignIn(this.props);
+  };
+
+  googleAuth = () => {
+    googleSignIn(this.props);
+  };
+
+  facebookAuth = () => {
+    facebookSignIn(this.props);
+  };
+
+
   login = async e => {
 
     e.preventDefault();
 
     const { history } = this.props;
 
-    const fields = ["username", "password"];
+    const fields = ["email", "password"];
     const formElements = e.target.elements;
 
     const formValues = fields
@@ -50,28 +77,24 @@ class LoginPage extends React.Component {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    let loginRequest;
-    try {
-      loginRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/login`,
-        {
-          ...formValues
-        },
-        {
-          withCredentials: true
-        }
-      );
-    } catch ({ response }) {
-      loginRequest = response;
-    }
-    const { data: loginRequestData } = loginRequest;
-    if (loginRequestData.success) {
-      return history.push("/dashboard");
-    }
+      firebase
+      .auth()
+      .signInWithEmailAndPassword(formValues.email, formValues.password)
+      .then(user => {
+        console.log(user);
+        console.log("Successfully Logged In!");
+        console.log(firebase.auth().currentUser);
+        this.props.history.push("/dashboard"); //Redirecting to Dashboard page.
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
 
-    this.setState({
-      errors: loginRequestData.messages && loginRequestData.messages.errors
-    });
+        console.log("Error Code", errorCode);
+        console.log("Error Message", errorMessage);
+      });
+      
   };
   handleToggle = value => {
     const { checked } = this.state;
@@ -95,10 +118,10 @@ class LoginPage extends React.Component {
       <div className={classes.container}>
         <GridContainer justify="center">
           <GridItem xs={12} sm={8}>
-            <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
+            {/* <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
               Log in to see how you can speed up your web development with out
               of the box CRUD for #User Management and more.{" "}
-            </h4>
+            </h4> */}
           </GridItem>
         </GridContainer>
         <GridContainer justify="center">
@@ -111,30 +134,44 @@ class LoginPage extends React.Component {
                 >
                   <h4 className={classes.cardTitle}>Log in</h4>
                   <div className={classes.socialLine}>
-                    {[
-                      "fa fa-facebook-square",
-                      "fa fa-twitter",
-                      "fa fa-google-plus"
-                    ].map((prop, key) => {
-                      return (
-                        <Button
-                          color="transparent"
-                          justIcon
-                          key={key}
-                          className={classes.customButtonClass}
-                        >
-                          <i className={prop} />
-                        </Button>
-                      );
-                    })}
+                  <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.facebookAuth}
+                    >
+                      <i className={"fa fa-facebook-square"} />
+                    </Button>
+
+                    <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.githubAuth}
+                    >
+                      <i className={"fa fa-github"} />
+                    </Button>
+
+                    <Button
+                      color="transparent"
+                      justIcon
+                      className={classes.customButtonClass}
+                      onClick={this.googleAuth}
+                    >
+                      <i className={"fa fa-google-plus"} />
+                    </Button>
+
                   </div>
                 </CardHeader>
                 <CardBody>
                   <p
                     className={`${classes.textCenter} ${classes.checkboxLabel}`}
                   >
-                    Or Sign in with <strong>admin@material.com</strong> and the
-                    password <strong>secret</strong>{" "}
+              
+                    {!(this.state.forgot) && <p style={{cursor:'pointer'}} onClick={()=> this.setState({forgot:true})}>Forgot password?</p>}
+                    {(this.state.forgot) && <p>Incase you forgot your password enter email and click <span><strong style={{cursor:'pointer'}} >here</strong></span> to send a password reset email.</p>}
+                    
+                    
                   </p>
                   <CustomInput
                     labelText="Email..."
@@ -174,7 +211,7 @@ class LoginPage extends React.Component {
                       )
                     }}
                   />
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     classes={{
                       root:
                         classes.checkboxLabelControl +
@@ -195,7 +232,7 @@ class LoginPage extends React.Component {
                       />
                     }
                     label={<span>Remember me</span>}
-                  />
+                  /> */}
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button type="submit" color="primary" simple size="lg" block>
