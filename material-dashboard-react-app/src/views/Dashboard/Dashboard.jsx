@@ -66,6 +66,7 @@ class Dashboard extends React.Component {
         this.props.history.push("/login"); //Redirecting to home page.
       }
     });
+    this.fetchAllTask();
   }
 
   fetchAllTask = () => {
@@ -81,9 +82,11 @@ class Dashboard extends React.Component {
             i,
             child.val().task,
             child.val().points,
-            moment(child.val().createdAt).format("MMMM Do, YYYY")
+            moment(child.val().createdAt).format("MMMM Do, YYYY"),
+            "viewTask?task=" + child.key
           ]);
           taskID.push(child.key);
+          console.log(child.key);
           i++;
         });
         this.setState({
@@ -95,7 +98,7 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    this.fetchAllTask();
+    console.log(this.state);
   }
 
   handleChange = (event, value) => {
@@ -313,7 +316,7 @@ class Dashboard extends React.Component {
                 <CardBody>
                   <Table
                     tableHeaderColor="warning"
-                    tableHead={["ID", "Name", "Base points", "Date"]}
+                    tableHead={["ID", "Name", "Base points", "Date", "submit"]}
                     tableData={this.state.allTask}
                   />
                 </CardBody>

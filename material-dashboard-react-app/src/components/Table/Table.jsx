@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -36,6 +36,13 @@ function CustomTable({ ...props }) {
             return (
               <TableRow key={key}>
                 {prop.map((prop, key) => {
+                  if (key == 4) {
+                    return (
+                      <TableCell className={classes.tableCell} key={key}>
+                        <a href={prop}>Submit and view</a>
+                      </TableCell>
+                    );
+                  }
                   return (
                     <TableCell className={classes.tableCell} key={key}>
                       {prop}

@@ -54,13 +54,13 @@ function TableList(props) {
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Rank","Name", "Uploads", "Points"]}
+              tableHead={["Rank", "Name", "Uploads", "Points"]}
               tableData={[
-                ["  1","Dakota Rice", 23,100],
-                ["  1","Dakota Rice", 23,100],
-                ["  1","Dakota Rice", 23,100],
-                ["  1","Dakota Rice", 23,100],
-                ["  1","Dakota Rice", 23,100],
+                ["  1", "Dakota Rice", 23, 100],
+                ["  1", "Dakota Rice", 23, 100],
+                ["  1", "Dakota Rice", 23, 100],
+                ["  1", "Dakota Rice", 23, 100],
+                ["  1", "Dakota Rice", 23, 100]
               ]}
             />
           </CardBody>
