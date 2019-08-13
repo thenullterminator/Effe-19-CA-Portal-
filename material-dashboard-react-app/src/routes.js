@@ -9,6 +9,7 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 import Register from "@material-ui/icons/GroupAdd";
 import Login from "@material-ui/icons/LockOpen";
+import Acc from "@material-ui/icons/AccountCircle";
 // core components/views for Admin layout
 
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
@@ -27,6 +28,7 @@ import RTLPage from "views/RTLPage/RTLPage.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
+import LogoutPage from "views/Pages/Logout.js";
 
 const dashboardRoutes = [
   {
@@ -84,21 +86,21 @@ const dashboardRoutes = [
     component: NotificationsPage,
     layout: "/admin"
   },
+  // {
+  //   path: "/upgrade-to-pro",
+  //   name: "   Log Out   ",
+  //   rtlName: "التطور للاحترافية",
+  //   icon: Acc,
+  //   component: UpgradeToPro,
+  //   layout: "/admin"
+  // },
   {
-    path: "/upgrade-to-pro",
-    name: "Upgrade To PRO",
+    path: "/logout",
+    name: "   Log Out   ",
     rtlName: "التطور للاحترافية",
-    icon: Unarchive,
-    component: UpgradeToPro,
+    icon: Acc,
+    component: LogoutPage,
     layout: "/admin"
-  },
-  {
-    path: "/rtl-page",
-    name: "RTL Support",
-    rtlName: "پشتیبانی از راست به چپ",
-    icon: Language,
-    component: RTLPage,
-    layout: "/rtl"
   },
   {
     path: "/login-page",

@@ -39,7 +39,7 @@ function CustomTable({ ...props }) {
                   if (key == 4) {
                     return (
                       <TableCell className={classes.tableCell} key={key}>
-                        <a href={prop}>Submit and view</a>
+                        <a href={prop}>submit/view</a>
                       </TableCell>
                     );
                   }

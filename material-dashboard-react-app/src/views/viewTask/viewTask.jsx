@@ -64,7 +64,7 @@ class viewTask extends React.Component {
         // User is signed out.
         // ...
         console.log("Signed out!");
-        this.props.history.push("/login"); //Redirecting to home page.
+        this.props.history.push("/"); //Redirecting to home page.
       }
     });
     this.fetchTask = this.fetchTask.bind(this);
@@ -80,7 +80,7 @@ class viewTask extends React.Component {
       .ref("TASKS")
       .child(s)
       .on("value", snapshot => {
-        this.setState({ Task: snapshot.val() });
+        this.setState({ Task: snapshot.val(),isLoading:false });
         //console.log(snapshot.val());
       });
   }
@@ -88,6 +88,8 @@ class viewTask extends React.Component {
   render() {
     const { classes } = this.props;
 
+    if (this.state.isLoading) return <h1>Loading</h1>;
+    else {
     return (
       <div>
         <GridContainer>
@@ -119,6 +121,7 @@ class viewTask extends React.Component {
       </div>
     );
   }
+}
 }
 
 viewTask.propTypes = {

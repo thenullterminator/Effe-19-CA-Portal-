@@ -13,14 +13,12 @@ import Navbar from "components/Navbars/Navbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
-
 import routes from "routes.js";
-
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
-
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
-
+import Acc from "@material-ui/icons/AccountCircle";
+import firebase from "../firebase/firebase";
 const { REACT_APP_SERVER_URL } = process.env;
 let userInfo = {};
 
@@ -47,12 +45,29 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser:{},
       image: image,
       color: "blue",
       hasImage: true,
       fixedClasses: "dropdown show",
       mobileOpen: false,      
     };
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+
+        console.log("Signed in! ", user.toJSON());
+        this.setState({
+          currentUser: user,
+        });
+
+      } else {
+        // User is signed out.
+        // ...
+        console.log("Signed out!");
+        this.props.history.push("/"); //Redirecting to home page.
+      }
+    });
   }
   handleImageClick = image => {
     this.setState({ image: image });
@@ -121,7 +136,7 @@ class Dashboard extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={"Creative Tim"}
+          logoText={(this.state.currentUser.displayName!==undefined) && this.state.currentUser.displayName.split(' ')[0]}
           logo={logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}

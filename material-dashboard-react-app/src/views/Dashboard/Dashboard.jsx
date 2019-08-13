@@ -50,7 +50,7 @@ class Dashboard extends React.Component {
       value: 0,
       allTask: []
     };
-
+    // Authenticating and setting up session.
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // console.log("Signed in");
@@ -63,19 +63,16 @@ class Dashboard extends React.Component {
         // User is signed out.
         // ...
         console.log("Signed out!");
-        this.props.history.push("/login"); //Redirecting to home page.
+        this.props.history.push("/"); //Redirecting to home page.
       }
     });
-    this.fetchAllTask();
-  }
-
-  fetchAllTask = () => {
+    // Fetching task list from database.
     firebase
       .database()
       .ref("TASKS")
-      .on("value", snapshot => {
-        const AllTask = [],
-          taskID = [];
+      .once("value").then(snapshot => {
+
+        const AllTask = [],taskID = [];
         var i = 1;
         snapshot.forEach(child => {
           AllTask.push([
@@ -90,15 +87,12 @@ class Dashboard extends React.Component {
           i++;
         });
         this.setState({
-          allTask: AllTask
-        });
+          allTask: AllTask,
+          isLoading:false
+        }) ;
         //console.log(AllTask);
-        // console.log(this.state.allTask);
-      });
-  };
-
-  componentDidMount() {
-    console.log(this.state);
+        // console.log("All Tasks:",this.state.allTask);
+      });    
   }
 
   handleChange = (event, value) => {
@@ -316,7 +310,7 @@ class Dashboard extends React.Component {
                 <CardBody>
                   <Table
                     tableHeaderColor="warning"
-                    tableHead={["ID", "Name", "Base points", "Date", "submit"]}
+                    tableHead={["ID", "Name", "Base points", "Date", "Activity"]}
                     tableData={this.state.allTask}
                   />
                 </CardBody>
