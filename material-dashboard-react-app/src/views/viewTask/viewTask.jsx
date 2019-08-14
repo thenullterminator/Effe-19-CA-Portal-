@@ -44,9 +44,6 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 import firebase from "../../firebase/firebase";
 import SelectInput from "@material-ui/core/Select/SelectInput";
 
-
-
-
 // For notification
 
 // @material-ui/icons
@@ -92,10 +89,7 @@ const styles = {
 };
 
 class viewTask extends React.Component {
-
   constructor(props) {
-
-
     super(props);
 
     this.state = {
@@ -105,15 +99,13 @@ class viewTask extends React.Component {
       Task: {},
       tc: false
     };
-    
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-
         console.log("Signed in! ", user.toJSON());
         this.setState({
           currentUser: user
         });
-
       } else {
         // User is signed out.
         // ...
@@ -121,6 +113,11 @@ class viewTask extends React.Component {
         this.props.history.push("/"); //Redirecting to home page.
       }
     });
+
+    var id = window.setTimeout(null, 0);
+    while (id--) {
+      window.clearTimeout(id);
+    }
 
     this.fetchTask = this.fetchTask.bind(this);
     const values = queryString.parse(this.props.location.search);
@@ -133,30 +130,26 @@ class viewTask extends React.Component {
       .ref("TASKS")
       .child(s)
       .on("value", snapshot => {
-        this.setState({ Task: snapshot.val(),isLoading:false });
+        this.setState({ Task: snapshot.val(), isLoading: false });
         //console.log(snapshot.val());
       });
   }
 
   // to stop the warning of calling setState of unmounted component
   componentWillUnmount() {
-    var id = window.setTimeout(null, 0);
-    while (id--) {
-      window.clearTimeout(id);
-    }
+    // Donot use this, depericated function, instead use Constructor.
   }
- 
-  inputElement='';
 
-  uploadImage=(e)=>{
+  inputElement = "";
 
-    const files=e.target.files;
+  uploadImage = e => {
+    const files = e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
-    var storageRef = firebase.storage().ref('images/ShareUploads2.0');
-    storageRef.put(blob).then((snapshot)=> {
-      console.log('Uploaded a blob or file!');
+    var storageRef = firebase.storage().ref("images/ShareUploads2.0");
+    storageRef.put(blob).then(snapshot => {
+      console.log("Uploaded a blob or file!");
       // For user Notification
-      const place="tc";
+      const place = "tc";
       var x = [];
       x[place] = true;
       this.setState(x);
@@ -168,74 +161,74 @@ class viewTask extends React.Component {
         6000
       );
     });
-    
-  }
- 
+  };
+
   render() {
     const { classes } = this.props;
 
     if (this.state.isLoading) return <h1>Loading</h1>;
     else {
-    return (
-      <div>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={14}>
-            <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>
-                  {this.state.Task.task}
-                </h4>
-                <p className={classes.cardCategoryWhite}>
-                  Points for this Task:<b> {this.state.Task.points}</b>
-                </p>
-              </CardHeader>
-              {/* // <button>Submit</button> */}
-              <CardBody>
-
-                {/* For uploading */}
-                <input
-                    type='file'
-                    id='upload'
-                    name='fileupload'
+      return (
+        <div>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={14}>
+              <Card>
+                <CardHeader color="primary">
+                  <h4 className={classes.cardTitleWhite}>
+                    {this.state.Task.task}
+                  </h4>
+                  <p className={classes.cardCategoryWhite}>
+                    Points for this Task:<b> {this.state.Task.points}</b>
+                  </p>
+                </CardHeader>
+                {/* // <button>Submit</button> */}
+                <CardBody>
+                  {/* For uploading */}
+                  <input
+                    type="file"
+                    id="upload"
+                    name="fileupload"
                     multiple
-                    onChange={(e)=>this.uploadImage(e)}
+                    onChange={e => this.uploadImage(e)}
                     ref={input => {
-                      this.inputElement=input;
+                      this.inputElement = input;
                     }}
-                    style={{display:'none'}}
-                />
-                
-                <Button type="submit" color="primary" simple size="lg" block  onClick={()=>this.inputElement.click()}>
-                UPLOAD
-                </Button>
-
-                {/* For notification */}
-                <Snackbar
-                  place="tc"
-                  color="info"
-                  icon={AddAlert}
-                  message="Image Uploaded Successfully  ✌🏻"
-                  open={this.state.tc}
-                  closeNotification={() => this.setState({ tc: false })}
-                  close
-                />
-
-
-
-                Your Submissions:
-                {/* <Table
+                    style={{ display: "none" }}
+                  />
+                  <Button
+                    type="submit"
+                    color="primary"
+                    simple
+                    size="lg"
+                    block
+                    onClick={() => this.inputElement.click()}
+                  >
+                    UPLOAD
+                  </Button>
+                  {/* For notification */}
+                  <Snackbar
+                    place="tc"
+                    color="info"
+                    icon={AddAlert}
+                    message="Image Uploaded Successfully  ✌🏻"
+                    open={this.state.tc}
+                    closeNotification={() => this.setState({ tc: false })}
+                    close
+                  />
+                  Your Submissions:
+                  {/* <Table
                   tableHeaderColor="warning"
                   tableHead={["ID", "Name", "Base points", "Date"]}
                   // tableData={}
                 /> */}
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      </div>
-    );
+                </CardBody>
+              </Card>
+            </GridItem>
+          </GridContainer>
+        </div>
+      );
+    }
   }
-}
 }
 
 viewTask.propTypes = {
