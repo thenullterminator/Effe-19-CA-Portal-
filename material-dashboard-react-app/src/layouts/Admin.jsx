@@ -137,7 +137,7 @@ class Dashboard extends React.Component {
         <Sidebar
           routes={routes}
           logoText={(this.state.currentUser.displayName!==undefined) && this.state.currentUser.displayName.split(' ')[0]}
-          logo={logo}
+          logo={this.state.currentUser.photoURL || logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}

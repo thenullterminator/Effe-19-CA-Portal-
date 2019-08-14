@@ -13,7 +13,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-
+import firebase from "../../firebase/firebase";
 import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
@@ -41,9 +41,27 @@ class UserProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: {}
+      errors: {},
+      currentUser: {},
     };
     this.updateProfile = this.updateProfile.bind(this);
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("Signed in! ", user.toJSON());
+        
+        // console.log('stamp',moment().valueOf());
+        this.setState({
+          currentUser: user
+        });
+      } else {
+        // User is signed out.
+        // ...
+        console.log("Signed out!");
+        this.props.history.push("/"); //Redirecting to home page.
+      }
+    });
+
   }
   async updateProfile(e) {
     e.preventDefault();
@@ -140,7 +158,7 @@ class UserProfile extends React.Component {
             <Card profile>
               <CardAvatar profile>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
-                  <img src={avatar} alt="..." />
+                  <img src={this.state.currentUser.photoURL || avatar} alt="..." />
                 </a>
               </CardAvatar>
               <CardBody profile>
