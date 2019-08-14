@@ -129,7 +129,7 @@ class Notifications extends React.Component {
                 }
                 close
                 color="info"
-              />
+              />tc: false,
               <SnackbarContent
                 message={
                   'SUCCESS - This is a regular notification made with color="success"'
