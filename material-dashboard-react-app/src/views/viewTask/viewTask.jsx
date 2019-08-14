@@ -92,10 +92,7 @@ const styles = {
 };
 
 class viewTask extends React.Component {
-
   constructor(props) {
-
-
     super(props);
 
     this.state = {
@@ -106,10 +103,9 @@ class viewTask extends React.Component {
       tc: false,
       ImagesToRender:[]
     };
-    
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-
         console.log("Signed in! ", user.toJSON());
         
         // console.log('stamp',moment().valueOf());
@@ -124,6 +120,11 @@ class viewTask extends React.Component {
       }
     });
 
+    var id = window.setTimeout(null, 0);
+    while (id--) {
+      window.clearTimeout(id);
+    }
+
     this.fetchTask = this.fetchTask.bind(this);
     const values = queryString.parse(this.props.location.search);
     this.fetchTask(values.task);
@@ -136,30 +137,26 @@ class viewTask extends React.Component {
       .ref("TASKS")
       .child(s)
       .on("value", snapshot => {
-        this.setState({ Task: snapshot.val(),isLoading:false });
+        this.setState({ Task: snapshot.val(), isLoading: false });
         //console.log(snapshot.val());
       });
   }
 
   // to stop the warning of calling setState of unmounted component
   componentWillUnmount() {
-    var id = window.setTimeout(null, 0);
-    while (id--) {
-      window.clearTimeout(id);
-    }
+    // Donot use this, depericated function, instead use Constructor.
   }
- 
-  inputElement='';
 
-  uploadImage=(e)=>{
+  inputElement = "";
 
-    const files=e.target.files;
+  uploadImage = e => {
+    const files = e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
     var storageRef = firebase.storage().ref(this.state.currentUser.uid+'/'+moment().valueOf().toString());
     storageRef.put(blob).then((snapshot)=> {
       console.log('Uploaded a blob or file!');
       // For user Notification
-      const place="tc";
+      const place = "tc";
       var x = [];
       x[place] = true;
       this.setState(x);
@@ -244,9 +241,9 @@ class viewTask extends React.Component {
                     id='upload'
                     name='fileupload'
                     multiple
-                    onChange={(e)=>this.uploadImage(e)}
+                    onChange={e => this.uploadImage(e)}
                     ref={input => {
-                      this.inputElement=input;
+                      this.inputElement = input;
                     }}
                     style={{display:'none'}}
                 />
@@ -281,14 +278,14 @@ class viewTask extends React.Component {
                   tableHead={["ID", "Name", "Base points", "Date"]}
                   tableData={[["1","Dhairya Patel","10","sdfijdsofi"]]}
                 /> */}
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      </div>
-    );
+                </CardBody>
+              </Card>
+            </GridItem>
+          </GridContainer>
+        </div>
+      );
+    }
   }
-}
 }
 
 viewTask.propTypes = {
