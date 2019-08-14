@@ -43,7 +43,7 @@ import {
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import firebase from "../../firebase/firebase";
 import SelectInput from "@material-ui/core/Select/SelectInput";
-
+// import moment from 'moment';
 
 
 
@@ -103,17 +103,19 @@ class viewTask extends React.Component {
       isLoading: true,
       value: 0,
       Task: {},
-      tc: false
+      tc: false,
+      ImagesToRender:[]
     };
     
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
 
         console.log("Signed in! ", user.toJSON());
+        
+        // console.log('stamp',moment().valueOf());
         this.setState({
           currentUser: user
         });
-
       } else {
         // User is signed out.
         // ...
@@ -125,6 +127,7 @@ class viewTask extends React.Component {
     this.fetchTask = this.fetchTask.bind(this);
     const values = queryString.parse(this.props.location.search);
     this.fetchTask(values.task);
+    this.fetchAllImages();
   }
 
   fetchTask(s) {
@@ -152,7 +155,7 @@ class viewTask extends React.Component {
 
     const files=e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
-    var storageRef = firebase.storage().ref('images/ShareUploads2.0');
+    var storageRef = firebase.storage().ref(this.state.currentUser.uid+'/'+moment().valueOf().toString());
     storageRef.put(blob).then((snapshot)=> {
       console.log('Uploaded a blob or file!');
       // For user Notification
@@ -168,8 +171,50 @@ class viewTask extends React.Component {
         6000
       );
     });
-    
   }
+ 
+  imgRender=[];
+  fetchAllImages=()=>{
+
+    console.log("Running");
+    var storageRef = firebase.storage().ref(this.state.currentUser.uid);
+    
+    // Now we get the references of these images
+    storageRef.listAll().then((result)=> {
+
+      result.items.forEach((imageRef) =>{
+        // And finally display them
+
+        imageRef.getDownloadURL().then((url)=> {
+
+          console.log(url);
+          this.imgRender.push(url.toString());
+
+        }).catch((error)=> {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+  
+          console.log("Error Code", errorCode);
+          console.log("Error Message", errorMessage);
+        });
+      });
+      console.log(this.imgRender);
+      console.log("go please");
+      // return imgRender.length;
+      // this.setState({
+      //   ImagesToRender:imgRender
+      // });
+    }).catch((error)=> {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      console.log("Error Code", errorCode);
+      console.log("Error Message", errorMessage);
+    });
+   
+  };
  
   render() {
     const { classes } = this.props;
@@ -178,6 +223,7 @@ class viewTask extends React.Component {
     else {
     return (
       <div>
+        {}
         <GridContainer>
           <GridItem xs={12} sm={12} md={14}>
             <Card>
@@ -219,14 +265,21 @@ class viewTask extends React.Component {
                   closeNotification={() => this.setState({ tc: false })}
                   close
                 />
+                Previous Submissions:
+                      <div style={{display:'flex',flexWrap:'wrap'}}>
+                      {/* {console.log("HEre:",this.fetchAllImages())} */}
+                      {this.imgRender.length}
+                      {/* {this.fetchAllImages().map((url,ind)=>(<img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/>))} */}
+                     {/* {this.fetchAllImages()} */}
+                      <img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/>
 
+                      </div>
 
-
-                Your Submissions:
-                {/* <Table
+                {/*
+                <Table
                   tableHeaderColor="warning"
                   tableHead={["ID", "Name", "Base points", "Date"]}
-                  // tableData={}
+                  tableData={[["1","Dhairya Patel","10","sdfijdsofi"]]}
                 /> */}
               </CardBody>
             </Card>
