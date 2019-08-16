@@ -45,8 +45,6 @@ import firebase from "../../firebase/firebase";
 import SelectInput from "@material-ui/core/Select/SelectInput";
 // import moment from 'moment';
 
-
-
 // For notification
 
 // @material-ui/icons
@@ -101,17 +99,19 @@ class viewTask extends React.Component {
       value: 0,
       Task: {},
       tc: false,
-      ImagesToRender:[]
+      ImagesToRender: []
     };
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         console.log("Signed in! ", user.toJSON());
-        
+
         // console.log('stamp',moment().valueOf());
         this.setState({
           currentUser: user
         });
+        // const identity = values.task + this.state.currentUser.uid;
+        // console.log(this.state.currentUser.uid);
       } else {
         // User is signed out.
         // ...
@@ -126,9 +126,33 @@ class viewTask extends React.Component {
     }
 
     this.fetchTask = this.fetchTask.bind(this);
+    // this.fetchAllImages = this.fetchAllImages.bind(this);
     const values = queryString.parse(this.props.location.search);
     this.fetchTask(values.task);
-    this.fetchAllImages();
+
+    const imgs = [];
+    firebase
+      .database()
+      .ref("Subs")
+      .once("value", snapshot => {
+        const identity = values.task + this.state.currentUser.uid;
+        snapshot.forEach(child => {
+          if (child.val().valid.localeCompare(identity) == 0) {
+            const topush =
+              "https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/" +
+              child.val().path +
+              "?alt=media";
+            console.log(topush);
+            imgs.push(topush);
+          }
+        });
+
+        console.log(snapshot);
+        this.setState({ ImagesToRender: imgs });
+        console.log(imgs);
+        //console.log(AllTask);
+        // console.log("All Tasks:",this.state.allTask);
+      });
   }
 
   fetchTask(s) {
@@ -138,7 +162,7 @@ class viewTask extends React.Component {
       .child(s)
       .on("value", snapshot => {
         this.setState({ Task: snapshot.val(), isLoading: false });
-        //console.log(snapshot.val());
+        console.log(snapshot.val());
       });
   }
 
@@ -150,11 +174,17 @@ class viewTask extends React.Component {
   inputElement = "";
 
   uploadImage = e => {
+    const name = moment()
+      .valueOf()
+      .toString();
+    const values = queryString.parse(this.props.location.search);
+    let locs = this.state.currentUser.uid + "/" + name;
+    //console.log(locs);
     const files = e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
-    var storageRef = firebase.storage().ref(this.state.currentUser.uid+'/'+moment().valueOf().toString());
-    storageRef.put(blob).then((snapshot)=> {
-      console.log('Uploaded a blob or file!');
+    var storageRef = firebase.storage().ref(locs);
+    storageRef.put(blob).then(snapshot => {
+      console.log("Uploaded a blob or file!");
       // For user Notification
       const place = "tc";
       var x = [];
@@ -168,111 +198,144 @@ class viewTask extends React.Component {
         6000
       );
     });
-  }
- 
-  imgRender=[];
-  fetchAllImages=()=>{
-
-    console.log("Running");
-    var storageRef = firebase.storage().ref(this.state.currentUser.uid);
-    
-    // Now we get the references of these images
-    storageRef.listAll().then((result)=> {
-
-      result.items.forEach((imageRef) =>{
-        // And finally display them
-
-        imageRef.getDownloadURL().then((url)=> {
-
-          console.log(url);
-          this.imgRender.push(url.toString());
-
-        }).catch((error)=> {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-  
-          console.log("Error Code", errorCode);
-          console.log("Error Message", errorMessage);
-        });
+    locs = this.state.currentUser.uid + "%2F" + name;
+    console.log(locs);
+    console.log(values.task + this.state.currentUser.uid + locs);
+    const identity = values.task + this.state.currentUser.uid;
+    firebase
+      .database()
+      .ref("Subs")
+      .push({
+        valid: identity,
+        path: locs
+      })
+      .then(() => {
+        // location.reload();
+        console.log("SuccessFully Added Task to Database");
+      })
+      .catch(e => {
+        console.log(e);
       });
-      console.log(this.imgRender);
-      console.log("go please");
-      // return imgRender.length;
-      // this.setState({
-      //   ImagesToRender:imgRender
-      // });
-    }).catch((error)=> {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-
-      console.log("Error Code", errorCode);
-      console.log("Error Message", errorMessage);
-    });
-   
   };
- 
+
+  imgRender = [];
+  // fetchAllImages() {
+  //   console.log("Running");
+  //   var storageRef = firebase.storage().ref(this.state.currentUser.uid);
+
+  //   // Now we get the references of these images
+  //   storageRef
+  //     .listAll()
+  //     .then(result => {
+  //       result.items.forEach(imageRef => {
+  //         // And finally display them
+
+  //         imageRef
+  //           .getDownloadURL()
+  //           .then(url => {
+  //             console.log(url);
+  //             this.imgRender.push(url.toString());
+  //           })
+  //           .catch(error => {
+  //             // Handle Errors here.
+  //             var errorCode = error.code;
+  //             var errorMessage = error.message;
+
+  //             console.log("Error Code", errorCode);
+  //             console.log("Error Message", errorMessage);
+  //           });
+  //       });
+  //       console.log(this.imgRender);
+  //       console.log("go please");
+  //       // return imgRender.length;
+  //       // this.setState({
+  //       //   ImagesToRender:imgRender
+  //       // });
+  //     })
+  //     .catch(error => {
+  //       // Handle Errors here.
+  //       var errorCode = error.code;
+  //       var errorMessage = error.message;
+
+  //       console.log("Error Code", errorCode);
+  //       console.log("Error Message", errorMessage);
+  //     });
+  // }
+
   render() {
     const { classes } = this.props;
 
     if (this.state.isLoading) return <h1>Loading</h1>;
     else {
-    return (
-      <div>
-        {}
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={14}>
-            <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>
-                  {this.state.Task.task}
-                </h4>
-                <p className={classes.cardCategoryWhite}>
-                  Points for this Task:<b> {this.state.Task.points}</b>
-                </p>
-              </CardHeader>
-              {/* // <button>Submit</button> */}
-              <CardBody>
-
-                {/* For uploading */}
-                <input
-                    type='file'
-                    id='upload'
-                    name='fileupload'
+      return (
+        <div>
+          {/* {this.fetchAllImages()} */}
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={14}>
+              <Card>
+                <CardHeader color="primary">
+                  <h4 className={classes.cardTitleWhite}>
+                    {this.state.Task.task}
+                  </h4>
+                  <p className={classes.cardCategoryWhite}>
+                    Points for this Task:<b> {this.state.Task.points}</b>
+                  </p>
+                </CardHeader>
+                {/* // <button>Submit</button> */}
+                <CardBody>
+                  {/* For uploading */}
+                  <input
+                    type="file"
+                    id="upload"
+                    name="fileupload"
                     multiple
                     onChange={e => this.uploadImage(e)}
                     ref={input => {
                       this.inputElement = input;
                     }}
-                    style={{display:'none'}}
-                />
-                
-                <Button type="submit" color="primary" simple size="lg" block  onClick={()=>this.inputElement.click()}>
-                UPLOAD
-                </Button>
+                    style={{ display: "none" }}
+                  />
+                  <Button
+                    type="submit"
+                    color="primary"
+                    simple
+                    size="lg"
+                    block
+                    onClick={() => this.inputElement.click()}
+                  >
+                    UPLOAD
+                  </Button>
+                  {/* For notification */}
+                  <Snackbar
+                    place="tc"
+                    color="info"
+                    icon={AddAlert}
+                    message="Image Uploaded Successfully  ✌🏻"
+                    open={this.state.tc}
+                    closeNotification={() => this.setState({ tc: false })}
+                    close
+                  />
+                  Previous Submissions:
+                  <div style={{ display: "flex", flexWrap: "wrap" }}>
+                    {/* {console.log("HEre:",this.fetchAllImages())} */}
 
-                {/* For notification */}
-                <Snackbar
-                  place="tc"
-                  color="info"
-                  icon={AddAlert}
-                  message="Image Uploaded Successfully  ✌🏻"
-                  open={this.state.tc}
-                  closeNotification={() => this.setState({ tc: false })}
-                  close
-                />
-                Previous Submissions:
-                      <div style={{display:'flex',flexWrap:'wrap'}}>
-                      {/* {console.log("HEre:",this.fetchAllImages())} */}
-                      {this.imgRender.length}
-                      {/* {this.fetchAllImages().map((url,ind)=>(<img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/>))} */}
-                     {/* {this.fetchAllImages()} */}
-                      <img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/><img  src={"https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"} alt='image' style={{width:"300px",margin:'30px'}}/>
-
-                      </div>
-
-                {/*
+                    {this.state.ImagesToRender.map((url, ind) => (
+                      <img
+                        src={url.toString()}
+                        alt="image"
+                        style={{ width: "300px", margin: "30px" }}
+                      />
+                    ))}
+                    {/* {this.fetchAllImages()} */}
+                    {/* <img
+                      src={
+                        "https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/0HHb8B4wzAfI5UrUoDxbUMaQtKi2%2F1565797516874?alt=media&token=cd2730dd-48a5-4ecd-967f-ea04413a2f26"
+                      }
+                      alt="image"
+                      style={{ width: "300px", margin: "30px" }}
+                    /> */}
+                  </div>
+                  {/*
                 <Table
                   tableHeaderColor="warning"
                   tableHead={["ID", "Name", "Base points", "Date"]}
