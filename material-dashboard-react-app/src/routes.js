@@ -5,6 +5,7 @@ import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
+import Call from "@material-ui/icons/Call";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 import Register from "@material-ui/icons/GroupAdd";
@@ -29,6 +30,7 @@ import RTLPage from "views/RTLPage/RTLPage.jsx";
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
 import LogoutPage from "views/Pages/Logout.js";
+import ContactPage from "views/Pages/contact.js";
 
 const dashboardRoutes = [
   {
@@ -55,21 +57,21 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/typography",
-    name: "Typography",
+    path: "/message",
+    name: "Message",
     rtlName: "طباعة",
     icon: LibraryBooks,
     component: Typography,
     layout: "/admin"
   },
-  {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: BubbleChart,
-    component: Icons,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   rtlName: "الرموز",
+  //   icon: BubbleChart,
+  //   component: Icons,
+  //   layout: "/admin"
+  // },
   {
     path: "/maps",
     name: "Maps",
@@ -79,13 +81,21 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/notifications",
-    name: "Notifications",
+    path: "/contactus",
+    name: "Contact Us",
     rtlName: "إخطارات",
-    icon: Notifications,
-    component: NotificationsPage,
+    icon: Call,
+    component: ContactPage,
     layout: "/admin"
   },
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   rtlName: "إخطارات",
+  //   icon: Notifications,
+  //   component: NotificationsPage,
+  //   layout: "/admin"
+  // },
   // {
   //   path: "/upgrade-to-pro",
   //   name: "   Log Out   ",

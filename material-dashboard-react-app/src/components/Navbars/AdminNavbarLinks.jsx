@@ -84,7 +84,7 @@ class HeaderLinks extends React.Component {
             <Search />
           </Button>
         </div>
-        <Button
+        {/* <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
           simple={!(window.innerWidth > 959)}
@@ -95,7 +95,7 @@ class HeaderLinks extends React.Component {
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Dashboard</p>
           </Hidden>
-        </Button>
+        </Button> */}
         <div className={classes.manager}>
           <Button
             buttonRef={node => {
@@ -110,7 +110,7 @@ class HeaderLinks extends React.Component {
             className={classes.buttonLink}
           >
             <Notifications className={classes.icons} />
-            <span className={classes.notifications}>5</span>
+            <span className={classes.notifications}>2</span>
             <Hidden mdUp implementation="css">
               <p onClick={this.handleClick} className={classes.linkText}>
                 Notification
@@ -144,32 +144,15 @@ class HeaderLinks extends React.Component {
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        Mike John responded to your email
+                        Welcome! You have successfully registered.
                       </MenuItem>
                       <MenuItem
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        You have 5 new tasks
+                       Start contributing and win exciting prizes. 
                       </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        You're now friend with Andrew
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Another Notification
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Another One
-                      </MenuItem>
+                      
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -178,7 +161,7 @@ class HeaderLinks extends React.Component {
           </Poppers>
         </div>
         <div className={classes.manager}>
-          <Button
+          {/* <Button
             color={window.innerWidth > 959 ? "transparent" : "white"}
             justIcon={window.innerWidth > 959}
             simple={!(window.innerWidth > 959)}
@@ -192,7 +175,7 @@ class HeaderLinks extends React.Component {
             <Hidden mdUp implementation="css">
               <p className={classes.linkText}>Profile</p>
             </Hidden>
-          </Button>
+          </Button> */}
           <Poppers
             open={profilePopupOpen}
             anchorEl={this.anchorEl}
@@ -216,38 +199,7 @@ class HeaderLinks extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList role="menu">
-                      <NavLink to="/admin/user">
-                        <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          Profile
-                        </MenuItem>
-                      </NavLink>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Settings
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Activity
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Support
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.logout}
-                        className={classes.dropdownItem}
-                      >
-                        Logout
-                      </MenuItem>
+                     
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

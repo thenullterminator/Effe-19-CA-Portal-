@@ -6,11 +6,12 @@ import ChartistGraph from "react-chartist";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
+import Store from "@material-ui/icons/Face";
 import Warning from "@material-ui/icons/Warning";
 import DateRange from "@material-ui/icons/DateRange";
 import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
+import Update from "@material-ui/icons/Grade";
+import Whatshot from "@material-ui/icons/Whatshot";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
@@ -48,17 +49,23 @@ class Dashboard extends React.Component {
       currentUser: {},
       isLoading: true,
       value: 0,
-      allTask: []
+      allTask: [],
+      score:0
     };
     // Authenticating and setting up session.
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // console.log("Signed in");
         console.log("Signed in! ", user.toJSON());
-        this.setState({
-          currentUser: user,
-          isLoading: false
+
+        firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
+          this.setState({
+            currentUser: user,
+            isLoading: false,
+            score:snapshot.val().score
+          });
         });
+
       } else {
         // User is signed out.
         // ...
@@ -72,6 +79,7 @@ class Dashboard extends React.Component {
       .ref("TASKS")
       .once("value").then(snapshot => {
 
+        // console.log('Tasks:',snapshot.val());
         const AllTask = [],taskID = [];
         var i = 1;
         snapshot.forEach(child => {
@@ -114,10 +122,10 @@ class Dashboard extends React.Component {
               <Card>
                 <CardHeader color="warning" stats icon>
                   <CardIcon color="warning">
-                    <Icon>content_copy</Icon>
+                    <Whatshot/>
                   </CardIcon>
                   <p className={classes.cardCategory}>Total Score</p>
-                  <h3 className={classes.cardTitle}>350+</h3>
+                  <h3 className={classes.cardTitle}>{this.state.score}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -145,7 +153,7 @@ class Dashboard extends React.Component {
               <Card>
                 <CardHeader color="danger" stats icon>
                   <CardIcon color="danger">
-                    <Icon>info_outline</Icon>
+                    <Update/>
                   </CardIcon>
                   <p className={classes.cardCategory}>Edition</p>
                   <h3 className={classes.cardTitle}>17th</h3>
@@ -254,7 +262,7 @@ class Dashboard extends React.Component {
               </Card>
             </GridItem> */}
           </GridContainer>
-          <GridContainer>
+          {/* <GridContainer>
             <GridItem xs={12} sm={12} md={14}>
               <CustomTabs
                 title="Tasks:"
@@ -297,7 +305,7 @@ class Dashboard extends React.Component {
                 ]}
               />
             </GridItem>
-          </GridContainer>
+          </GridContainer> */}
           <GridContainer>
             <GridItem xs={12} sm={12} md={14}>
               <Card>
@@ -310,7 +318,7 @@ class Dashboard extends React.Component {
                 <CardBody>
                   <Table
                     tableHeaderColor="warning"
-                    tableHead={["ID", "Name", "Base points", "Date", "Activity"]}
+                    tableHead={["ID", "Name", "Points", "Date", "Activity"]}
                     tableData={this.state.allTask}
                   />
                 </CardBody>

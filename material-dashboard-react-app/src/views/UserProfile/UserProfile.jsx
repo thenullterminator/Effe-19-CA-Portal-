@@ -43,12 +43,23 @@ class UserProfile extends React.Component {
     this.state = {
       errors: {},
       currentUser: {},
+      isLoading:true,
+      score:0,
+      uploads:0
     };
     this.updateProfile = this.updateProfile.bind(this);
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         console.log("Signed in! ", user.toJSON());
+        firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
+          this.setState({
+            currentUser: user,
+            isLoading: false,
+            score:snapshot.val().score,
+            uploads:snapshot.val().uploads
+          });
+        });
         
         // console.log('stamp',moment().valueOf());
         this.setState({
@@ -100,10 +111,14 @@ class UserProfile extends React.Component {
   render() {
     const { classes, name, email } = this.props;
     const { errors } = this.state;
+    if (this.state.isLoading) return <h1>Loading</h1>;
+    else {
     return (
       <div>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={8}>
+
+        
+          {/* <GridItem xs={12} sm={12} md={8}>
             <form onSubmit={this.updateProfile}>
               <Card>
                 <CardHeader color="primary">
@@ -153,8 +168,10 @@ class UserProfile extends React.Component {
                 </CardFooter>
               </Card>
             </form>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          </GridItem> */}
+
+
+          <GridItem xs={12} sm={12} md={6} style={{margin:'0 auto'}}>
             <Card profile>
               <CardAvatar profile>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
@@ -162,16 +179,32 @@ class UserProfile extends React.Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-                <h4 className={classes.cardTitle}>Alec Thompson</h4>
+                <h6 className={classes.cardCategory}><b>CAMPUS AMBASSADOR</b></h6>
+                <h4 className={classes.cardTitle}>{this.state.currentUser.displayName}</h4>
                 <p className={classes.description}>
-                  Don't be scared of the truth because we need to restart the
-                  human foundation in truth And I love you like Kanye loves
-                  Kanye I love Rick Owens’ bed design but the back is...
+                 <b>E-Mail</b>
                 </p>
-                <Button color="primary" round>
+                <p className={classes.description}>
+                 {this.state.currentUser.email}
+                </p>
+                <p className={classes.description}>
+                 <b>Total Score</b>
+                </p>
+                <p className={classes.description}>
+                 {this.state.score}
+                </p>
+                <p className={classes.description}>
+                 <b>Total Uploads</b>
+                </p>
+                <p className={classes.description}>
+                {this.state.uploads}
+                </p>
+                <p className={classes.description}>
+               Hurry up! and start contributing. 😃
+                </p>
+                {/* <Button color="primary" round>
                   Follow
-                </Button>
+                </Button> */}
               </CardBody>
             </Card>
           </GridItem>
@@ -179,6 +212,7 @@ class UserProfile extends React.Component {
       </div>
     );
   }
+}
 }
 
 UserProfile.propTypes = {

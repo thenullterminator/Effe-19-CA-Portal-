@@ -28,6 +28,7 @@ import firebase from '../../firebase/firebase';
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
+import { database } from "firebase";
 
 
 const { REACT_APP_SERVER_URL } = process.env;
@@ -84,7 +85,7 @@ class LoginPage extends React.Component {
         console.log(user);
         console.log("Successfully Logged In!");
         console.log(firebase.auth().currentUser);
-        this.props.history.push("/dashboard"); //Redirecting to Dashboard page.
+        this.props.history.push("/admin/dashboard"); //Redirecting to Dashboard page.
       })
       .catch(error => {
         // Handle Errors here.

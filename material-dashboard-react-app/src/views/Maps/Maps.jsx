@@ -91,7 +91,7 @@ import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 // var Feature = ReactMapboxGl.Feature;
  
 const Map = ReactMapboxGl({
-  accessToken: "pk.eyJ1IjoiZGpwMjgwMyIsImEiOiJjanpiN3Rvc28wMW1rM29wbHllZTZ4ZmJwIn0.y_pH-i4i7UUWT_e0B52BMw"
+  accessToken: "pk.eyJ1IjoiZWZmZXJ2ZXNjZW5jZS0xOSIsImEiOiJjanpmZGRiZXAwYmFuM29zOWRybzB3cHRyIn0.yRS9YBIfjwPhrvzw50TZWw"
 });
 
 

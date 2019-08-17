@@ -26,7 +26,7 @@ class AdminPage extends React.Component {
 
       onPointsChange = e => {
             this.setState({
-                  points: e.target.value
+                  points: parseInt(e.target.value)
             });
       };
 
@@ -68,7 +68,7 @@ class AdminPage extends React.Component {
 
                         <textarea
                               type="text"
-                              placeholder="Note"
+                              placeholder="Link"
                               value={this.state.note}
                               onChange={this.onNoteChange}
                         />

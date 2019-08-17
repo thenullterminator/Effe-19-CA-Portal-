@@ -85,6 +85,40 @@ class RegisterPage extends React.Component {
             // Update successful.
             console.log("Name Added!");
             console.log(User);
+
+            firebase.database().ref('Users/'+User.uid.toString()).once('value').then((snapshot)=> {
+              console.log(snapshot.val());
+              if(snapshot.val()==null)
+              {
+                
+                  firebase.database().ref('Users/'+user.uid).set({
+                    uid:User.uid,
+                    score:0,
+                    uploads:0,
+                    name:User.displayName
+                  }).then(()=>{
+                    console.log("Initialized User");
+                  }).catch(error => {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                  });
+              }
+              else
+              {
+                console.log("Already Initialised");
+              }
+              
+            }).catch(error => {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              console.log(errorCode);
+              console.log(errorMessage);
+            }); 
+
           })
           .catch(error => {
             // An error happened.

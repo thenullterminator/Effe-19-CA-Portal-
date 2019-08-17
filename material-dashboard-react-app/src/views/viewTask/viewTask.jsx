@@ -89,6 +89,7 @@ const styles = {
   }
 };
 
+
 class viewTask extends React.Component {
   constructor(props) {
     super(props);
@@ -99,17 +100,65 @@ class viewTask extends React.Component {
       value: 0,
       Task: {},
       tc: false,
-      ImagesToRender: []
+      ImagesToRender: [],
+      score:0,
+      uploads:0,
+      uploading:'notdone'
     };
 
     firebase.auth().onAuthStateChanged(user => {
+
       if (user) {
         console.log("Signed in! ", user.toJSON());
+        firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
+          
 
-        // console.log('stamp',moment().valueOf());
-        this.setState({
-          currentUser: user
+
+          const imgs = [];
+          firebase
+            .database()
+            .ref("Subs")
+            .once("value", snapshot2 => {
+
+              this.setState({
+                currentUser: user,
+                isLoading: false,
+                score:snapshot.val().score,
+                uploads:snapshot.val().uploads
+              });
+
+              const identity = values.task + this.state.currentUser.uid;
+              snapshot2.forEach(child => {
+                console.log(identity);
+                console.log(child.val().valid);
+                if (child.val().valid.localeCompare(identity) == 0) 
+                {
+                  const topush =
+                    "https://firebasestorage.googleapis.com/v0/b/effe-19ca.appspot.com/o/" +
+                    child.val().path +
+                    "?alt=media";
+                  console.log(topush);
+                  imgs.push(topush);
+                }
+              });
+
+        console.log(snapshot2);
+        this.setState({ ImagesToRender: imgs });
+        console.log(imgs);
+        //console.log(AllTask);
+        // console.log("All Tasks:",this.state.allTask);
+      });
+
+
+
+
+
+
         });
+        // console.log('stamp',moment().valueOf());
+        // this.setState({
+        //   currentUser: user
+        // });
         // const identity = values.task + this.state.currentUser.uid;
         // console.log(this.state.currentUser.uid);
       } else {
@@ -118,6 +167,8 @@ class viewTask extends React.Component {
         console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
+
+
     });
 
     var id = window.setTimeout(null, 0);
@@ -130,29 +181,6 @@ class viewTask extends React.Component {
     const values = queryString.parse(this.props.location.search);
     this.fetchTask(values.task);
 
-    const imgs = [];
-    firebase
-      .database()
-      .ref("Subs")
-      .once("value", snapshot => {
-        const identity = values.task + this.state.currentUser.uid;
-        snapshot.forEach(child => {
-          if (child.val().valid.localeCompare(identity) == 0) {
-            const topush =
-              "https://firebasestorage.googleapis.com/v0/b/effe19.appspot.com/o/" +
-              child.val().path +
-              "?alt=media";
-            console.log(topush);
-            imgs.push(topush);
-          }
-        });
-
-        console.log(snapshot);
-        this.setState({ ImagesToRender: imgs });
-        console.log(imgs);
-        //console.log(AllTask);
-        // console.log("All Tasks:",this.state.allTask);
-      });
   }
 
   fetchTask(s) {
@@ -160,9 +188,11 @@ class viewTask extends React.Component {
       .database()
       .ref("TASKS")
       .child(s)
-      .on("value", snapshot => {
+      .once("value").then( snapshot => {
         this.setState({ Task: snapshot.val(), isLoading: false });
         console.log(snapshot.val());
+      }).catch((e)=>{
+        
       });
   }
 
@@ -174,6 +204,9 @@ class viewTask extends React.Component {
   inputElement = "";
 
   uploadImage = e => {
+
+    console.log("Debugging:",this.state.currentUser.uid);
+
     const name = moment()
       .valueOf()
       .toString();
@@ -183,8 +216,16 @@ class viewTask extends React.Component {
     const files = e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
     var storageRef = firebase.storage().ref(locs);
+    this.setState({
+      isLoading:true
+    });
     storageRef.put(blob).then(snapshot => {
       console.log("Uploaded a blob or file!");
+       this.setState({
+         uploading:'done',
+       });
+    }).catch((e)=>{
+
       // For user Notification
       const place = "tc";
       var x = [];
@@ -197,6 +238,8 @@ class viewTask extends React.Component {
         }.bind(this),
         6000
       );
+      return;
+      // window.location.reload();
     });
     locs = this.state.currentUser.uid + "%2F" + name;
     console.log(locs);
@@ -210,10 +253,19 @@ class viewTask extends React.Component {
         path: locs
       })
       .then(() => {
-        // location.reload();
         console.log("SuccessFully Added Task to Database");
+        let total=this.state.Task.points+this.state.score;
+        console.log("Updated Points:",total);
+
+        firebase.database().ref('Users/'+this.state.currentUser.uid.toString()).update({
+          score:total,
+          uploads:this.state.uploads+1
+        }).then(()=>{
+          console.log("Points Updated");
+        });
       })
       .catch(e => {
+
         console.log(e);
       });
   };
@@ -265,11 +317,15 @@ class viewTask extends React.Component {
   render() {
     const { classes } = this.props;
 
-    if (this.state.isLoading) return <h1>Loading</h1>;
+    if (this.state.isLoading) return (<div>
+      <h1>Loading</h1>
+      {this.state.uploading=='done' && window.location.reload()}
+    </div>);
     else {
       return (
         <div>
           {/* {this.fetchAllImages()} */}
+
           <GridContainer>
             <GridItem xs={12} sm={12} md={14}>
               <Card>
@@ -283,6 +339,10 @@ class viewTask extends React.Component {
                 </CardHeader>
                 {/* // <button>Submit</button> */}
                 <CardBody>
+
+                <p><b>Link to Share:</b><br></br> <a href={this.state.Task.note} target='_blank'>{this.state.Task.note}</a></p>
+
+
                   {/* For uploading */}
                   <input
                     type="file"
@@ -310,7 +370,7 @@ class viewTask extends React.Component {
                     place="tc"
                     color="info"
                     icon={AddAlert}
-                    message="Image Uploaded Successfully  ✌🏻"
+                    message="Image Upload unsuccessful, please try again."
                     open={this.state.tc}
                     closeNotification={() => this.setState({ tc: false })}
                     close
@@ -323,7 +383,7 @@ class viewTask extends React.Component {
                       <img
                         src={url.toString()}
                         alt="image"
-                        style={{ width: "300px", margin: "30px" }}
+                        style={{ width: "265px", margin: "10px" }}
                       />
                     ))}
                     {/* {this.fetchAllImages()} */}

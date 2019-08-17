@@ -7,11 +7,15 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import Primary from "components/Typography/Primary.jsx";
+import Info from "components/Typography/Info.jsx";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
-
+import {Link} from 'react-router-dom';
+import Button from "components/CustomButtons/Button.jsx";
 function CustomTable({ ...props }) {
-  const { classes, tableHead, tableData, tableHeaderColor } = props;
+  const { classes, tableHead, tableData, tableHeaderColor ,currentUser} = props;
+  
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -24,7 +28,7 @@ function CustomTable({ ...props }) {
                     className={classes.tableCell + " " + classes.tableHeadCell}
                     key={key}
                   >
-                    {prop}
+                    <h5>{prop}</h5>
                   </TableCell>
                 );
               })}
@@ -39,13 +43,28 @@ function CustomTable({ ...props }) {
                   if (key == 4) {
                     return (
                       <TableCell className={classes.tableCell} key={key}>
-                        <a href={prop}>submit/view</a>
+                      <Link  style={{textDecoration:'none',color:'white'}} to={prop}>
+                        <Button
+                        color="warning"
+                        >
+                        Submit
+                        </Button>
+                        </Link>
                       </TableCell>
                     );
                   }
+                  else if(prop==currentUser)
+                  {
+                    return (
+                    <TableCell className={classes.tableCell} key={key}>
+                      <Primary><h4>{prop}</h4></Primary>
+                    </TableCell>
+                  );
+
+                  }
                   return (
                     <TableCell className={classes.tableCell} key={key}>
-                      {prop}
+                      <h5>{prop}</h5>
                     </TableCell>
                   );
                 })}

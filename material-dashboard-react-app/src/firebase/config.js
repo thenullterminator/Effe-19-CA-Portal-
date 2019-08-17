@@ -1,11 +1,11 @@
 const FireBaseConfig={
-      apiKey: "AIzaSyBHUCJ753WpuewQ-hBljI2gv19W0EJPGz8",
-      authDomain: "effe19.firebaseapp.com",
-      databaseURL: "https://effe19.firebaseio.com",
-      projectId: "effe19",
-      storageBucket: "effe19.appspot.com",
-      messagingSenderId: "230456199081",
-      appId: "1:230456199081:web:a14dea4d54b36e77"
+          apiKey: "AIzaSyDlOWfP7ZpRVA2CZe10fwtW5m_nq_37uAA",
+    authDomain: "effe-19ca.firebaseapp.com",
+    databaseURL: "https://effe-19ca.firebaseio.com",
+    projectId: "effe-19ca",
+    storageBucket: "effe-19ca.appspot.com",
+    messagingSenderId: "465425180811",
+    appId: "1:465425180811:web:90a1a78bdc15e349"
 };
 
 export default FireBaseConfig;
