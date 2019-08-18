@@ -16,7 +16,7 @@ import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.jsx";
 import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.jsx";
 
 import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
-
+import Image from "assets/img/img2.jpg";
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
@@ -83,19 +83,16 @@ const Sidebar = ({ ...props }) => {
           else if(prop.path === "/contactus")
           {
 
-
-            activePro = classes.activePro + " ";
             listItemClasses = classNames({
-              [" " + classes[color]]: true
+              [" " + classes[color]]: activeRoute(prop.layout + prop.path)
             });
 
             const whiteFontClasses = classNames({
             [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
           });
           return (
-           
-              <a href="mailto:effervescence@iiita.ac.in" target='_blank'>
-              <ListItem button className={classes.itemLink + listItemClasses}>
+            <a href="mailto:effervescence@iiita.ac.in" target='_blank'>
+            <ListItem button className={classes.itemLink + listItemClasses}>
                 {typeof prop.icon === "string" ? (
                   <Icon
                     className={classNames(classes.itemIcon, whiteFontClasses, {
@@ -119,10 +116,8 @@ const Sidebar = ({ ...props }) => {
                   disableTypography={true}
                 />
               </ListItem>
-              </a>
-          );
-            
-
+            </a>
+            );
           }
           
           else {
@@ -233,7 +228,7 @@ const Sidebar = ({ ...props }) => {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
+              style={{ backgroundImage: "url(" + Image + ")" }}
             />
           ) : null}
         </Drawer>

@@ -74,7 +74,7 @@ const dashboardRoutes = [
   // },
   {
     path: "/maps",
-    name: "Maps",
+    name: "Where to find us",
     rtlName: "خرائط",
     icon: LocationOn,
     component: Maps,
