@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Loader from 'react-loader-spinner'
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -113,7 +114,21 @@ class Dashboard extends React.Component {
   render() {
     const { classes } = this.props;
 
-    if (this.state.isLoading) return <h1>Loading</h1>;
+    if (this.state.isLoading) 
+    {
+    return (
+      <div style={{height:"80vh",width:"100%",display:'flex',justifyContent:'center'}}>
+        <Loader
+        type="BallTriangle"
+        color="black"
+        height="80"
+        width="80"
+        style={{marginTop:"38vh"}}
+        />
+      </div>
+    );
+    }
+    
     else {
       return (
         <div>

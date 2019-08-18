@@ -79,7 +79,53 @@ const Sidebar = ({ ...props }) => {
             );
 
 
-          } else {
+          } 
+          else if(prop.path === "/contactus")
+          {
+
+
+            activePro = classes.activePro + " ";
+            listItemClasses = classNames({
+              [" " + classes[color]]: true
+            });
+
+            const whiteFontClasses = classNames({
+            [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
+          });
+          return (
+           
+              <a href="mailto:effervescence@iiita.ac.in" target='_blank'>
+              <ListItem button className={classes.itemLink + listItemClasses}>
+                {typeof prop.icon === "string" ? (
+                  <Icon
+                    className={classNames(classes.itemIcon, whiteFontClasses, {
+                      [classes.itemIconRTL]: props.rtlActive
+                    })}
+                  >
+                    {prop.icon}
+                  </Icon>
+                ) : (
+                  <prop.icon
+                    className={classNames(classes.itemIcon, whiteFontClasses, {
+                      [classes.itemIconRTL]: props.rtlActive
+                    })}
+                  />
+                )}
+                <ListItemText
+                  primary={props.rtlActive ? prop.rtlName : prop.name}
+                  className={classNames(classes.itemText, whiteFontClasses, {
+                    [classes.itemTextRTL]: props.rtlActive
+                  })}
+                  disableTypography={true}
+                />
+              </ListItem>
+              </a>
+          );
+            
+
+          }
+          
+          else {
             listItemClasses = classNames({
               [" " + classes[color]]: activeRoute(prop.layout + prop.path)
             });

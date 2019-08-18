@@ -1,6 +1,7 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Loader from 'react-loader-spinner'
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -118,7 +119,19 @@ class TableList extends React.Component {
  
   render(){
     const { classes } = this.props;
-    if (this.state.isLoading) return <h1>Loading</h1>;
+    if (this.state.isLoading) {
+      return (
+        <div style={{height:"80vh",width:"100%",display:'flex',justifyContent:'center'}}>
+          <Loader
+          type="BallTriangle"
+          color="black"
+          height="80"
+          width="80"
+          style={{marginTop:"38vh"}}
+          />
+        </div>
+      );
+    }
     else {
     return (
       <div>

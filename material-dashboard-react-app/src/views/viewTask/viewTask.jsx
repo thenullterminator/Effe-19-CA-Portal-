@@ -33,7 +33,7 @@ import moment from "moment";
 import { bugs, website, server } from "variables/general.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import queryString from "query-string";
-
+import Loader from 'react-loader-spinner'
 import {
   dailySalesChart,
   emailsSubscriptionChart,
@@ -318,7 +318,15 @@ class viewTask extends React.Component {
     const { classes } = this.props;
 
     if (this.state.isLoading) return (<div>
-      <h1>Loading</h1>
+       <div style={{height:"80vh",width:"100%",display:'flex',justifyContent:'center'}}>
+        <Loader
+        type="BallTriangle"
+        color="black"
+        height="80"
+        width="80"
+        style={{marginTop:"38vh"}}
+        />
+      </div>
       {this.state.uploading=='done' && window.location.reload()}
     </div>);
     else {

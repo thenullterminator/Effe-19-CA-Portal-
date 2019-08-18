@@ -30,7 +30,7 @@ import RTLPage from "views/RTLPage/RTLPage.jsx";
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
 import LogoutPage from "views/Pages/Logout.js";
-import ContactPage from "views/Pages/contact.js";
+
 
 const dashboardRoutes = [
   {
@@ -85,7 +85,6 @@ const dashboardRoutes = [
     name: "Contact Us",
     rtlName: "إخطارات",
     icon: Call,
-    component: ContactPage,
     layout: "/admin"
   },
   // {

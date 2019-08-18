@@ -15,7 +15,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import firebase from "../../firebase/firebase";
 import avatar from "assets/img/faces/marc.jpg";
-
+import Loader from 'react-loader-spinner'
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -111,7 +111,19 @@ class UserProfile extends React.Component {
   render() {
     const { classes, name, email } = this.props;
     const { errors } = this.state;
-    if (this.state.isLoading) return <h1>Loading</h1>;
+    if (this.state.isLoading) {
+      return (
+        <div style={{height:"80vh",width:"100%",display:'flex',justifyContent:'center'}}>
+          <Loader
+          type="BallTriangle"
+          color="black"
+          height="80"
+          width="80"
+          style={{marginTop:"38vh"}}
+          />
+        </div>
+      );
+    }
     else {
     return (
       <div>
