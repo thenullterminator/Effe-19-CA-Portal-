@@ -13,8 +13,8 @@ import routes from "routes.js";
 
 import pagesStyle from "assets/jss/material-dashboard-react/layouts/authStyle.jsx";
 
-import register from "assets/img/register.jpeg";
-import login from "assets/img/login.jpeg";
+import register from "assets/img/img2.jpg";
+import login from "assets/img/img1.jpg";
 
 const switchRoutes = (
   <Switch>

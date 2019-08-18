@@ -14,13 +14,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
 import Menu from "@material-ui/icons/Menu";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Fingerprint from "@material-ui/icons/Fingerprint";
-import LockOpen from "@material-ui/icons/LockOpen";
-import MonetizationOn from "@material-ui/icons/MonetizationOn";
-
 // core components
 import Button from "components/CustomButtons/Button";
 
@@ -99,14 +95,14 @@ class AuthNavbar extends React.Component {
         <Toolbar className={classes.container}>
           <Hidden smDown>
             <div className={classes.flex}>
-              <Button href="#" className={classes.title} color="transparent">
+              <Button href="https://effe.org.in/#worksModal-1" className={classes.title} color="transparent">
                 Effervescence-19
               </Button>
             </div>
           </Hidden>
           <Hidden mdUp>
             <div className={classes.flex}>
-              <Button href="#" className={classes.title} color="transparent">
+              <Button href="https://effe.org.in/#worksModal-1" className={classes.title} color="transparent">
                 Effervescence-19
               </Button>
             </div>

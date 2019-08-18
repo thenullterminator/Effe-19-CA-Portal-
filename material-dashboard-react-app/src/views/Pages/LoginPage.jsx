@@ -1,17 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
-import Check from "@material-ui/icons/Check";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -28,8 +24,7 @@ import firebase from '../../firebase/firebase';
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
-import { database } from "firebase";
-
+import Loader from 'react-loader-spinner'
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -39,15 +34,9 @@ class LoginPage extends React.Component {
     this.state = {
       checked: [],
       errors: {},
-      forgot:false
+      forgot:false,
+      isLoading:false
     };
-
-    // firebase.auth().onAuthStateChanged(user => {
-    //   if (user) {
-    //     this.props.history.push("/admin/dashboard"); //Redirecting to home page.
-    //   }
-    // });
-
   }
 
   githubAuth = () => {
@@ -55,6 +44,9 @@ class LoginPage extends React.Component {
   };
 
   googleAuth = () => {
+    this.setState({
+      isLoading:true
+    });
     googleSignIn(this.props);
   };
 
@@ -115,137 +107,156 @@ class LoginPage extends React.Component {
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
-    return (
-      <div className={classes.container}>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={8}>
-            {/* <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
-              Log in to see how you can speed up your web development with out
-              of the box CRUD for #User Management and more.{" "}
-            </h4> */}
-          </GridItem>
-        </GridContainer>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={6} md={4}>
-            <form onSubmit={this.login}>
-              <Card className={classes[this.state.cardAnimaton]}>
-                <CardHeader
-                  className={`${classes.cardHeader} ${classes.textCenter}`}
-                  color="primary"
-                >
-                  <h4 className={classes.cardTitle}>Log in</h4>
-                  <div className={classes.socialLine}>
-                  <Button
-                      color="transparent"
-                      justIcon
-                      className={classes.customButtonClass}
-                      onClick={this.facebookAuth}
-                    >
-                      <i className={"fa fa-facebook-square"} />
-                    </Button>
 
-                    <Button
-                      color="transparent"
-                      justIcon
-                      className={classes.customButtonClass}
-                      onClick={this.githubAuth}
-                    >
-                      <i className={"fa fa-github"} />
-                    </Button>
 
-                    <Button
-                      color="transparent"
-                      justIcon
-                      className={classes.customButtonClass}
-                      onClick={this.googleAuth}
-                    >
-                      <i className={"fa fa-google-plus"} />
-                    </Button>
-
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <p
-                    className={`${classes.textCenter} ${classes.checkboxLabel}`}
+    if (this.state.isLoading) 
+    {
+      return (
+        <div className={classes.container} style={{height:"80vh",width:"100%",display:'flex',justifyContent:'center'}}>
+          <Loader
+          type="BallTriangle"
+          color="white"
+          height="80"
+          width="80"
+          style={{marginTop:"38vh"}}
+          />
+        </div>
+      );
+    }
+    
+    else {
+      return (
+        <div className={classes.container}>
+          <GridContainer justify="center">
+            <GridItem xs={12} sm={8}>
+              {/* <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
+                Log in to see how you can speed up your web development with out
+                of the box CRUD for #User Management and more.{" "}
+              </h4> */}
+            </GridItem>
+          </GridContainer>
+          <GridContainer justify="center">
+            <GridItem xs={12} sm={6} md={4}>
+              <form onSubmit={this.login}>
+                <Card className={classes[this.state.cardAnimaton]}>
+                  <CardHeader
+                    className={`${classes.cardHeader} ${classes.textCenter}`}
+                    color="primary"
                   >
-              
-                    {!(this.state.forgot) && <p style={{cursor:'pointer'}} onClick={()=> this.setState({forgot:true})}>Forgot password?</p>}
-                    {(this.state.forgot) && <p>Incase you forgot your password enter email and click <span><strong style={{cursor:'pointer'}} >here</strong></span> to send a password reset email.</p>}
-                    
-                    
-                  </p>
-                  <CustomInput
-                    labelText="Email..."
-                    id="email"
-                    error={errors.username || errors.invalidEmailOrPassword}
-                    formControlProps={{
-                      fullWidth: true,
-                      className: classes.formControlClassName
-                    }}
-                    inputProps={{
-                      required: true,
-                      name: "username",
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Email className={classes.inputAdornmentIcon} />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <CustomInput
-                    labelText="Password"
-                    id="password"
-                    error={errors.password || errors.invalidEmailOrPassword}
-                    formControlProps={{
-                      fullWidth: true,
-                      className: classes.formControlClassName
-                    }}
-                    inputProps={{
-                      type: "password",
-                      required: true,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Icon className={classes.inputAdornmentIcon}>
-                            lock_outline
-                          </Icon>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  {/* <FormControlLabel
-                    classes={{
-                      root:
-                        classes.checkboxLabelControl +
-                        " " +
-                        classes.checkboxLabelControlClassName,
-                      label: classes.checkboxLabel
-                    }}
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => this.handleToggle(1)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
-                        classes={{
-                          checked: classes.checked,
-                          root: classes.checkRoot
-                        }}
-                      />
-                    }
-                    label={<span>Remember me</span>}
-                  /> */}
-                </CardBody>
-                <CardFooter className={classes.justifyContentCenter}>
-                  <Button type="submit" color="primary" simple size="lg" block>
-                    Let's Go
-                  </Button>
-                </CardFooter>
-              </Card>
-            </form>
-          </GridItem>
-        </GridContainer>
-      </div>
-    );
+                    <h4 className={classes.cardTitle}>Log in</h4>
+                    <div className={classes.socialLine}>
+                    <Button
+                        color="transparent"
+                        justIcon
+                        className={classes.customButtonClass}
+                        onClick={this.facebookAuth}
+                      >
+                        <i className={"fa fa-facebook-square"} />
+                      </Button>
+
+                      <Button
+                        color="transparent"
+                        justIcon
+                        className={classes.customButtonClass}
+                        onClick={this.githubAuth}
+                      >
+                        <i className={"fa fa-github"} />
+                      </Button>
+
+                      <Button
+                        color="transparent"
+                        justIcon
+                        className={classes.customButtonClass}
+                        onClick={this.googleAuth}
+                      >
+                        <i className={"fa fa-google-plus"} />
+                      </Button>
+
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <p
+                      className={`${classes.textCenter} ${classes.checkboxLabel}`}
+                    >
+                
+                      {!(this.state.forgot) && <p style={{cursor:'pointer'}} onClick={()=> this.setState({forgot:true})}>Forgot password?</p>}
+                      {(this.state.forgot) && <p>Incase you forgot your password enter email and click <span><strong style={{cursor:'pointer'}} onClick={this.passwordReset} >here</strong></span> to send a password reset email.</p>}
+                      
+                      
+                    </p>
+                    <CustomInput
+                      labelText="Email..."
+                      id="email"
+                      error={errors.username || errors.invalidEmailOrPassword}
+                      formControlProps={{
+                        fullWidth: true,
+                        className: classes.formControlClassName
+                      }}
+                      inputProps={{
+                        required: true,
+                        name: "username",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Email className={classes.inputAdornmentIcon} />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <CustomInput
+                      labelText="Password"
+                      id="password"
+                      error={errors.password || errors.invalidEmailOrPassword}
+                      formControlProps={{
+                        fullWidth: true,
+                        className: classes.formControlClassName
+                      }}
+                      inputProps={{
+                        type: "password",
+                        required: true,
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Icon className={classes.inputAdornmentIcon}>
+                              lock_outline
+                            </Icon>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    {/* <FormControlLabel
+                      classes={{
+                        root:
+                          classes.checkboxLabelControl +
+                          " " +
+                          classes.checkboxLabelControlClassName,
+                        label: classes.checkboxLabel
+                      }}
+                      control={
+                        <Checkbox
+                          tabIndex={-1}
+                          onClick={() => this.handleToggle(1)}
+                          checkedIcon={<Check className={classes.checkedIcon} />}
+                          icon={<Check className={classes.uncheckedIcon} />}
+                          classes={{
+                            checked: classes.checked,
+                            root: classes.checkRoot
+                          }}
+                        />
+                      }
+                      label={<span>Remember me</span>}
+                    /> */}
+                  </CardBody>
+                  <CardFooter className={classes.justifyContentCenter}>
+                    <Button type="submit" color="primary" simple size="lg" block>
+                      Let's Go
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </form>
+            </GridItem>
+          </GridContainer>
+        </div>
+      );
+    }
   }
 }
 
