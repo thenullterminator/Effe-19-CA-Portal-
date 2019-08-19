@@ -109,7 +109,7 @@ class viewTask extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
 
       if (user) {
-        console.log("Signed in! ", user.toJSON());
+        ////console.log("Signed in! ", user.toJSON());
         firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
           
 
@@ -129,24 +129,24 @@ class viewTask extends React.Component {
 
               const identity = values.task + this.state.currentUser.uid;
               snapshot2.forEach(child => {
-                console.log(identity);
-                console.log(child.val().valid);
+                ////console.log(identity);
+                ////console.log(child.val().valid);
                 if (child.val().valid.localeCompare(identity) == 0) 
                 {
                   const topush =
                     "https://firebasestorage.googleapis.com/v0/b/effe-19ca.appspot.com/o/" +
                     child.val().path +
                     "?alt=media";
-                  console.log(topush);
+                  ////console.log(topush);
                   imgs.push(topush);
                 }
               });
 
-        console.log(snapshot2);
+        ////console.log(snapshot2);
         this.setState({ ImagesToRender: imgs });
-        console.log(imgs);
-        //console.log(AllTask);
-        // console.log("All Tasks:",this.state.allTask);
+        ////console.log(imgs);
+        //////console.log(AllTask);
+        // ////console.log("All Tasks:",this.state.allTask);
       });
 
 
@@ -155,16 +155,16 @@ class viewTask extends React.Component {
 
 
         });
-        // console.log('stamp',moment().valueOf());
+        // ////console.log('stamp',moment().valueOf());
         // this.setState({
         //   currentUser: user
         // });
         // const identity = values.task + this.state.currentUser.uid;
-        // console.log(this.state.currentUser.uid);
+        // ////console.log(this.state.currentUser.uid);
       } else {
         // User is signed out.
         // ...
-        console.log("Signed out!");
+        ////console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
 
@@ -190,7 +190,7 @@ class viewTask extends React.Component {
       .child(s)
       .once("value").then( snapshot => {
         this.setState({ Task: snapshot.val(), isLoading: false });
-        console.log(snapshot.val());
+        ////console.log(snapshot.val());
       }).catch((e)=>{
         
       });
@@ -205,14 +205,14 @@ class viewTask extends React.Component {
 
   uploadImage = e => {
 
-    console.log("Debugging:",this.state.currentUser.uid);
+    ////console.log("Debugging:",this.state.currentUser.uid);
 
     const name = moment()
       .valueOf()
       .toString();
     const values = queryString.parse(this.props.location.search);
     let locs = this.state.currentUser.uid + "/" + name;
-    //console.log(locs);
+    //////console.log(locs);
     const files = e.target.files;
     var blob = new Blob(files, { type: "image/jpeg" });
     var storageRef = firebase.storage().ref(locs);
@@ -220,7 +220,7 @@ class viewTask extends React.Component {
       isLoading:true
     });
     storageRef.put(blob).then(snapshot => {
-      console.log("Uploaded a blob or file!");
+      ////console.log("Uploaded a blob or file!");
        this.setState({
          uploading:'done',
        });
@@ -242,8 +242,8 @@ class viewTask extends React.Component {
       // window.location.reload();
     });
     locs = this.state.currentUser.uid + "%2F" + name;
-    console.log(locs);
-    console.log(values.task + this.state.currentUser.uid + locs);
+    ////console.log(locs);
+    ////console.log(values.task + this.state.currentUser.uid + locs);
     const identity = values.task + this.state.currentUser.uid;
     firebase
       .database()
@@ -253,26 +253,26 @@ class viewTask extends React.Component {
         path: locs
       })
       .then(() => {
-        console.log("SuccessFully Added Task to Database");
+        ////console.log("SuccessFully Added Task to Database");
         let total=this.state.Task.points+this.state.score;
-        console.log("Updated Points:",total);
+        ////console.log("Updated Points:",total);
 
         firebase.database().ref('Users/'+this.state.currentUser.uid.toString()).update({
           score:total,
           uploads:this.state.uploads+1
         }).then(()=>{
-          console.log("Points Updated");
+          ////console.log("Points Updated");
         });
       })
       .catch(e => {
 
-        console.log(e);
+        ////console.log(e);
       });
   };
 
   imgRender = [];
   // fetchAllImages() {
-  //   console.log("Running");
+  //   ////console.log("Running");
   //   var storageRef = firebase.storage().ref(this.state.currentUser.uid);
 
   //   // Now we get the references of these images
@@ -285,7 +285,7 @@ class viewTask extends React.Component {
   //         imageRef
   //           .getDownloadURL()
   //           .then(url => {
-  //             console.log(url);
+  //             ////console.log(url);
   //             this.imgRender.push(url.toString());
   //           })
   //           .catch(error => {
@@ -293,12 +293,12 @@ class viewTask extends React.Component {
   //             var errorCode = error.code;
   //             var errorMessage = error.message;
 
-  //             console.log("Error Code", errorCode);
-  //             console.log("Error Message", errorMessage);
+  //             ////console.log("Error Code", errorCode);
+  //             ////console.log("Error Message", errorMessage);
   //           });
   //       });
-  //       console.log(this.imgRender);
-  //       console.log("go please");
+  //       ////console.log(this.imgRender);
+  //       ////console.log("go please");
   //       // return imgRender.length;
   //       // this.setState({
   //       //   ImagesToRender:imgRender
@@ -309,8 +309,8 @@ class viewTask extends React.Component {
   //       var errorCode = error.code;
   //       var errorMessage = error.message;
 
-  //       console.log("Error Code", errorCode);
-  //       console.log("Error Message", errorMessage);
+  //       ////console.log("Error Code", errorCode);
+  //       ////console.log("Error Message", errorMessage);
   //     });
   // }
 
@@ -385,7 +385,7 @@ class viewTask extends React.Component {
                   />
                   Previous Submissions:
                   <div style={{ display: "flex", flexWrap: "wrap" }}>
-                    {/* {console.log("HEre:",this.fetchAllImages())} */}
+                    {/* {////console.log("HEre:",this.fetchAllImages())} */}
 
                     {this.state.ImagesToRender.map((url, ind) => (
                       <img

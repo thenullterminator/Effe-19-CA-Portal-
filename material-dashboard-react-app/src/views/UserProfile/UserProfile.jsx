@@ -51,7 +51,7 @@ class UserProfile extends React.Component {
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("Signed in! ", user.toJSON());
+        //console.log("Signed in! ", user.toJSON());
         firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
           this.setState({
             currentUser: user,
@@ -61,14 +61,14 @@ class UserProfile extends React.Component {
           });
         });
         
-        // console.log('stamp',moment().valueOf());
+        // //console.log('stamp',moment().valueOf());
         this.setState({
           currentUser: user
         });
       } else {
         // User is signed out.
         // ...
-        console.log("Signed out!");
+        //console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
     });

@@ -56,7 +56,7 @@ class Dashboard extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
 
-        console.log("Signed in! ", user.toJSON());
+        //console.log("Signed in! ", user.toJSON());
         this.setState({
           currentUser: user,
         });
@@ -64,7 +64,7 @@ class Dashboard extends React.Component {
       } else {
         // User is signed out.
         // ...
-        console.log("Signed out!");
+        //console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
     });

@@ -56,8 +56,8 @@ class Dashboard extends React.Component {
     // Authenticating and setting up session.
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        // console.log("Signed in");
-        console.log("Signed in! ", user.toJSON());
+        // //console.log("Signed in");
+        //console.log("Signed in! ", user.toJSON());
 
         firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=>{
           this.setState({
@@ -70,7 +70,7 @@ class Dashboard extends React.Component {
       } else {
         // User is signed out.
         // ...
-        console.log("Signed out!");
+        //console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
     });
@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
       .ref("TASKS")
       .once("value").then(snapshot => {
 
-        // console.log('Tasks:',snapshot.val());
+        // //console.log('Tasks:',snapshot.val());
         const AllTask = [],taskID = [];
         var i = 1;
         snapshot.forEach(child => {
@@ -92,15 +92,15 @@ class Dashboard extends React.Component {
             "viewTask?task=" + child.key
           ]);
           taskID.push(child.key);
-          console.log(child.key);
+          //console.log(child.key);
           i++;
         });
         this.setState({
           allTask: AllTask,
           isLoading:false
         }) ;
-        //console.log(AllTask);
-        // console.log("All Tasks:",this.state.allTask);
+        ////console.log(AllTask);
+        // //console.log("All Tasks:",this.state.allTask);
       });    
   }
 

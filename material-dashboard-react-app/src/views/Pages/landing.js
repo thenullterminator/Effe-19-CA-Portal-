@@ -13,7 +13,7 @@ const LandingPage=()=>{
       .signOut()
       .then(() => {
         // Sign-out successful.
-        console.log("Sign-out successful. at home");
+        // console.log("Sign-out successful. at home");
       })
       .catch(error => {
         // An error happened.

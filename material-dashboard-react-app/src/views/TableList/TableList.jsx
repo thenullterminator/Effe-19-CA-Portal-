@@ -56,13 +56,13 @@ class TableList extends React.Component {
     // Authenticating and setting up session.
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("Signed in! ", user.toJSON());
+        //console.log("Signed in! ", user.toJSON());
 
         firebase.database().ref('Users').once('value').then((snapshot)=>{
           
           let userData=[];
           snapshot.forEach((child)=>{
-            // console.log(child.toJSON());
+            // //console.log(child.toJSON());
             userData.push({
               id:child.val().uid,
               score:child.val().score,
@@ -70,7 +70,7 @@ class TableList extends React.Component {
               name:child.val().name
             });
           });
-          console.log(userData);
+          //console.log(userData);
           // Fake data
           userData=userData.concat([
             {id:"-1",name:"Nirmal Chandra",score:0,uploads:0},
@@ -87,7 +87,7 @@ class TableList extends React.Component {
             {id:"-1",name:"Ratan Grewal",score:0,uploads:0},
             {id:"-1",name:"Ankita Mangal",score:0,uploads:0},
           ]);
-          console.log(userData);
+          //console.log(userData);
 
           userData.sort((a,b)=>{
             return a.score<b.score?1:-1;
@@ -103,12 +103,12 @@ class TableList extends React.Component {
           });
 
           
-          console.log(user);
+          //console.log(user);
         });
       } else {
         // User is signed out.
         // ...
-        console.log("Signed out!");
+        //console.log("Signed out!");
         this.props.history.push("/"); //Redirecting to home page.
       }
     });

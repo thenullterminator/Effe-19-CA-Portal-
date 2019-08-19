@@ -8,12 +8,12 @@ const googleSignIn = props => {
     .then(result => {
       var token = result.credential.accessToken;
       var user = result.user;
-      console.log("Google:", user);
-      console.log("Token:", token);
+      //console.log("Google:", user);
+      //console.log("Token:", token);
        //Redirecting to Dashboard Page.
 
       firebase.database().ref('Users/'+user.uid.toString()).once('value').then((snapshot)=> {
-        console.log(snapshot.val());
+        //console.log(snapshot.val());
         if(snapshot.val()==null)
         {
           
@@ -23,18 +23,18 @@ const googleSignIn = props => {
               uploads:0,
               name:user.displayName
             }).then(()=>{
-              console.log("Initialized User");
+              //console.log("Initialized User");
             }).catch(error => {
               // Handle Errors here.
               var errorCode = error.code;
               var errorMessage = error.message;
-              console.log(errorCode);
-              console.log(errorMessage);
+              //console.log(errorCode);
+              //console.log(errorMessage);
             });
         }
         else
         {
-          console.log("Already Initialised");
+          //console.log("Already Initialised");
         }
         props.history.push("/admin/dashboard");
         
@@ -42,8 +42,8 @@ const googleSignIn = props => {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+        //console.log(errorCode);
+        //console.log(errorMessage);
       }); 
 
 
@@ -54,10 +54,10 @@ const googleSignIn = props => {
       var errorMessage = error.message;
       var email = error.email;
       var credential = error.credential;
-      console.log(errorCode);
-      console.log(errorMessage);
-      console.log(email);
-      console.log(credential);
+      //console.log(errorCode);
+      //console.log(errorMessage);
+      //console.log(email);
+      //console.log(credential);
     });
 };
 
