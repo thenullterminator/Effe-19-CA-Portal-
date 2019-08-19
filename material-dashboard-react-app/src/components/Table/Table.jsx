@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -8,7 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import Primary from "components/Typography/Primary.jsx";
-import Info from "components/Typography/Info.jsx";
+// import Info from "components/Typography/Info.jsx";
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
 import {Link} from 'react-router-dom';
@@ -40,7 +40,7 @@ function CustomTable({ ...props }) {
             return (
               <TableRow key={key}>
                 {prop.map((prop, key) => {
-                  if (key == 4) {
+                  if (key === 4) {
                     return (
                       <TableCell className={classes.tableCell} key={key}>
                       <Link  style={{textDecoration:'none',color:'white'}} to={prop}>
@@ -53,7 +53,7 @@ function CustomTable({ ...props }) {
                       </TableCell>
                     );
                   }
-                  else if(prop==currentUser)
+                  else if(prop===currentUser)
                   {
                     return (
                     <TableCell className={classes.tableCell} key={key}>

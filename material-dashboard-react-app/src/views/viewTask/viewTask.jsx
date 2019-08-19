@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 // react plugin for creating charts
-import ChartistGraph from "react-chartist";
+// import ChartistGraph from "react-chartist";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
-import Icon from "@material-ui/core/Icon";
+// import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 // import Store from "@material-ui/icons/Store";
 // import Warning from "@material-ui/icons/Warning";
@@ -20,29 +20,29 @@ import Icon from "@material-ui/core/Icon";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import Tasks from "components/Tasks/Tasks.jsx";
-import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
-import Danger from "components/Typography/Danger.jsx";
+// import Table from "components/Table/Table.jsx";
+// import Tasks from "components/Tasks/Tasks.jsx";
+// import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
+// import Danger from "components/Typography/Danger.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
+// import CardIcon from "components/Card/CardIcon.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+// import CardFooter from "components/Card/CardFooter.jsx";
 import moment from "moment";
-import { bugs, website, server } from "variables/general.jsx";
+// import { bugs, website, server } from "variables/general.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import queryString from "query-string";
 import Loader from 'react-loader-spinner'
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts.jsx";
+// import {
+//   dailySalesChart,
+//   emailsSubscriptionChart,
+//   completedTasksChart
+// } from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import firebase from "../../firebase/firebase";
-import SelectInput from "@material-ui/core/Select/SelectInput";
+// import SelectInput from "@material-ui/core/Select/SelectInput";
 // import moment from 'moment';
 
 // For notification

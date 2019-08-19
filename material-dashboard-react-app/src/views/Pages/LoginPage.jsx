@@ -26,7 +26,7 @@ import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
 import Loader from 'react-loader-spinner'
 
-const { REACT_APP_SERVER_URL } = process.env;
+// const { REACT_APP_SERVER_URL } = process.env;
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -54,12 +54,19 @@ class LoginPage extends React.Component {
     facebookSignIn(this.props);
   };
 
+  // formElement='';
+  // passwordReset=()=>{
+  //   //console.log("Forgot password");
+  //   this.formElement.preventDefault();
+  //   this.formElement.submit();
+    
+  // };
 
   login = async e => {
 
     e.preventDefault();
 
-    const { history } = this.props;
+    // const { history } = this.props;
 
     const fields = ["email", "password"];
     const formElements = e.target.elements;
@@ -74,9 +81,9 @@ class LoginPage extends React.Component {
       .auth()
       .signInWithEmailAndPassword(formValues.email, formValues.password)
       .then(user => {
-        console.log(user);
-        console.log("Successfully Logged In!");
-        console.log(firebase.auth().currentUser);
+        //console.log(user);
+        //console.log("Successfully Logged In!");
+        //console.log(firebase.auth().currentUser);
         this.props.history.push("/admin/dashboard"); //Redirecting to Dashboard page.
       })
       .catch(error => {
@@ -84,8 +91,8 @@ class LoginPage extends React.Component {
         var errorCode = error.code;
         var errorMessage = error.message;
 
-        console.log("Error Code", errorCode);
-        console.log("Error Message", errorMessage);
+        //console.log("Error Code", errorCode);
+        //console.log("Error Message", errorMessage);
       });
       
   };
@@ -137,7 +144,11 @@ class LoginPage extends React.Component {
           </GridContainer>
           <GridContainer justify="center">
             <GridItem xs={12} sm={6} md={4}>
-              <form onSubmit={this.login}>
+              <form onSubmit={this.login}
+              ref={form => {
+                      this.formElement = form;
+              }}
+              >
                 <Card className={classes[this.state.cardAnimaton]}>
                   <CardHeader
                     className={`${classes.cardHeader} ${classes.textCenter}`}
@@ -178,13 +189,16 @@ class LoginPage extends React.Component {
                     <p
                       className={`${classes.textCenter} ${classes.checkboxLabel}`}
                     >
-                
+{/*                 
                       {!(this.state.forgot) && <p style={{cursor:'pointer'}} onClick={()=> this.setState({forgot:true})}>Forgot password?</p>}
-                      {(this.state.forgot) && <p>Incase you forgot your password enter email and click <span><strong style={{cursor:'pointer'}} onClick={this.passwordReset} >here</strong></span> to send a password reset email.</p>}
-                      
+                      {(this.state.forgot) && <span>Incase you forgot your password enter email and click <span><b style={{cursor:'pointer'}} onClick={this.passwordReset} >here</b></span> to send a password reset email.</span>}
+                       */}
                       
                     </p>
                     <CustomInput
+                      onChange={()=>{
+                        //console.log("Changed");
+                      }}
                       labelText="Email..."
                       id="email"
                       error={errors.username || errors.invalidEmailOrPassword}

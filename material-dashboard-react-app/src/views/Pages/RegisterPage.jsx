@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -30,14 +30,13 @@ import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
 import githubSignIn from "../../lib/githubSignIn";
 
-const { REACT_APP_SERVER_URL } = process.env;
-
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checked: [],
-      errors: {}
+      errors: {},
+      accountTaken:false
     };
   }
 
@@ -67,13 +66,13 @@ class RegisterPage extends React.Component {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    console.log(formValues);
+    ////console.log(formValues);
 
     firebase
       .auth()
       .createUserWithEmailAndPassword(formValues.email, formValues.password)
       .then(user => {
-        console.log("Registration Successfull!");
+        //console.log("Registration Successfull!");
 
         const User = firebase.auth().currentUser;
 
@@ -83,40 +82,40 @@ class RegisterPage extends React.Component {
         })
           .then(user => {
             // Update successful.
-            console.log("Name Added!");
-            console.log(User);
+            //console.log("Name Added!");
+            //console.log(User);
 
             firebase.database().ref('Users/'+User.uid.toString()).once('value').then((snapshot)=> {
-              console.log(snapshot.val());
+              //console.log(snapshot.val());
               if(snapshot.val()==null)
               {
                 
-                  firebase.database().ref('Users/'+user.uid).set({
+                  firebase.database().ref('Users/'+User.uid).set({
                     uid:User.uid,
                     score:0,
                     uploads:0,
                     name:User.displayName
                   }).then(()=>{
-                    console.log("Initialized User");
+                    //console.log("Initialized User");
                   }).catch(error => {
                     // Handle Errors here.
                     var errorCode = error.code;
                     var errorMessage = error.message;
-                    console.log(errorCode);
-                    console.log(errorMessage);
+                    //console.log(errorCode);
+                    //console.log(errorMessage);
                   });
               }
               else
               {
-                console.log("Already Initialised");
+                ////console.log("Already Initialised");
               }
               
             }).catch(error => {
               // Handle Errors here.
               var errorCode = error.code;
               var errorMessage = error.message;
-              console.log(errorCode);
-              console.log(errorMessage);
+              ////console.log(errorCode);
+              ////console.log(errorMessage);
             }); 
 
           })
@@ -125,15 +124,15 @@ class RegisterPage extends React.Component {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
-            console.log("Error Code", errorCode);
-            console.log("Error Message", errorMessage);
+            ////console.log("Error Code", errorCode);
+            ////console.log("Error Message", errorMessage);
           });
 
         // Sending a verification email.
-        console.log("Current:", user);
+        ////console.log("Current:", user);
         User.sendEmailVerification()
           .then(() => {
-            console.log("Verification Email sent");
+            ////console.log("Verification Email sent");
             this.props.history.push("/auth/login-page"); //Redirecting to Login page.
           })
           .catch(error => {
@@ -142,8 +141,8 @@ class RegisterPage extends React.Component {
             var errorCode = error.code;
             var errorMessage = error.message;
 
-            console.log("Error Code", errorCode);
-            console.log("Error Message", errorMessage);
+            ////console.log("Error Code", errorCode);
+            ////console.log("Error Message", errorMessage);
           });
       })
       .catch(error => {
@@ -151,8 +150,15 @@ class RegisterPage extends React.Component {
         var errorCode = error.code;
         var errorMessage = error.message;
 
-        console.log("Error Code", errorCode);
-        console.log("Error Message", errorMessage);
+        if(errorCode=='auth/email-already-in-use')
+        {
+            this.setState({
+              accountTaken:true
+            });
+        }
+
+        // console.log("Error Code", errorCode);
+        // console.log("Error Message", errorMessage);
       });
   };
   handleToggle = value => {
@@ -217,8 +223,10 @@ class RegisterPage extends React.Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <p className={classes.cardDescription}>Or Be Classical</p>
-                  <CustomInput
+                {this.state.accountTaken?<p className={classes.cardDescription}> Email already registered try logging in.</p>
+                  :<p className={classes.cardDescription}>A verification email will be sent upon successful registration. Please verify so that we can get in touch with you.</p>
+                 }
+                   <CustomInput
                     labelText="Name..."
                     id="name"
                     formControlProps={{
