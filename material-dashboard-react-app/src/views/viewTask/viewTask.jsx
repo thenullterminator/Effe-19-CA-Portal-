@@ -391,7 +391,7 @@ class viewTask extends React.Component {
                       <img
                         src={url.toString()}
                         alt="image"
-                        style={{ width: "265px", margin: "10px" }}
+                        style={{ width: "265px", margin: "10px",height:'400px' }}
                       />
                     ))}
                     {/* {this.fetchAllImages()} */}
