@@ -23,7 +23,6 @@ import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageS
 import firebase from '../../firebase/firebase';
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
-import githubSignIn from "../../lib/githubSignIn";
 import Loader from 'react-loader-spinner'
 
 // const { REACT_APP_SERVER_URL } = process.env;
@@ -39,9 +38,7 @@ class LoginPage extends React.Component {
     };
   }
 
-  githubAuth = () => {
-    githubSignIn(this.props);
-  };
+ 
 
   googleAuth = () => {
     this.setState({
@@ -165,14 +162,14 @@ class LoginPage extends React.Component {
                         <i className={"fa fa-facebook-square"} />
                       </Button>
 
-                      <Button
+                      {/* <Button
                         color="transparent"
                         justIcon
                         className={classes.customButtonClass}
                         onClick={this.githubAuth}
                       >
                         <i className={"fa fa-github"} />
-                      </Button>
+                      </Button> */}
 
                       <Button
                         color="transparent"

@@ -28,7 +28,6 @@ import registerPageStyle from "assets/jss/material-dashboard-react/views/registe
 import firebase from '../../firebase/firebase';
 import googleSignIn from "../../lib/googleSignIn";
 import facebookSignIn from "../../lib/facebookSignIn";
-import githubSignIn from "../../lib/githubSignIn";
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -40,9 +39,9 @@ class RegisterPage extends React.Component {
     };
   }
 
-  githubAuth = () => {
-    githubSignIn(this.props);
-  };
+  // githubAuth = () => {
+  //   githubSignIn(this.props);
+  // };
 
   googleAuth = () => {
     googleSignIn(this.props);
@@ -201,14 +200,14 @@ class RegisterPage extends React.Component {
                       <i className={"fa fa-facebook-square"} />
                     </Button>
 
-                    <Button
+                    {/* <Button
                       color="transparent"
                       justIcon
                       className={classes.customButtonClass}
                       onClick={this.githubAuth}
                     >
                       <i className={"fa fa-github"} />
-                    </Button>
+                    </Button> */}
 
                     <Button
                       color="transparent"

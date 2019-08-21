@@ -348,7 +348,7 @@ class viewTask extends React.Component {
                 {/* // <button>Submit</button> */}
                 <CardBody>
 
-                <p><b>Link to Share:</b><br></br> <a href={this.state.Task.note} target='_blank'>{this.state.Task.note}</a></p>
+                <p><b>Post to Share:</b><br></br> <a href={this.state.Task.note} target='_blank'>{this.state.Task.note}</a></p>
 
 
                   {/* For uploading */}
