@@ -22,7 +22,7 @@ ReactDOM.render(
     <Switch>
     <LastLocationProvider>
       <Route exact path='/' component={Landing}/>
-      <Route exact path='/effe2019admin' component={AdminPage}/>
+      <Route exact path='/effe2019admin18003726' component={AdminPage}/>
       {/* <Route path="/logout" component={LogoutPage} /> */}
       <Route path="/admin" component={Admin} />
       <Route path="/auth" component={Auth} />
